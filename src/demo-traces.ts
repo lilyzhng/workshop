@@ -5,10 +5,10 @@
  * response views, no special UI paths.
  *
  * Each fixture is a typed plan: a root run + an ordered list of spans + a
- * sprinkle of live events. The default seed uses the same tables and shapes
- * real ingestion produces, with no special UI path.
+ * sprinkle of live events. Replays use the same tables and shapes real
+ * ingestion produces, with no special UI path.
  */
-import { upsertRun, insertSpan, upsertLiveEvent, hasAnyRuns, deleteRun } from "./db";
+import { upsertRun, insertSpan, upsertLiveEvent, deleteRun } from "./db";
 
 type BroadcastFn = (event: string, data: unknown) => void;
 
@@ -535,20 +535,6 @@ const DEMO_RUN_IDS = FIXTURES.map((fixture) => `demo_${fixture.slug}`);
 const DEMO_REPLAY_STAGGER_MS = 900;
 let pendingReplayTimers: Array<ReturnType<typeof setTimeout>> = [];
 
-/**
- * Put useful demo data into a brand-new Workshop DB without making the user
- * opt into a setting first. Existing user data wins; once any run exists, this
- * leaves the DB alone.
- */
-export function ensureDefaultDemoTraces(opts: { broadcast?: BroadcastFn } = {}): boolean {
-  if (hasAnyRuns()) return false;
-  const now = Date.now();
-  for (let i = 0; i < FIXTURES.length; i++) {
-    seedFixture(FIXTURES[i], now - (FIXTURES.length - i) * 15_000, opts.broadcast);
-  }
-  return true;
-}
-
 export function replayDefaultDemoTraces(opts: { broadcast?: BroadcastFn } = {}): { runIds: string[] } {
   clearPendingReplayTimers();
   for (const runId of DEMO_RUN_IDS) {
@@ -785,61 +771,4 @@ function stripCompletionAttrs(attrs: Record<string, string | number>): Record<st
   delete next["otel.status.message"];
   delete next["ai.usage.outputTokens"];
   return next;
-}
-
-function seedFixture(fixture: DemoFixture, startWall: number, broadcast?: BroadcastFn): void {
-  const runId = `demo_${fixture.slug}`;
-  const spanIdMap = buildSpanIdMap(runId, fixture);
-
-  const lastEnd = Math.max(...fixture.spans.map((s) => s.endOffsetMs));
-
-  upsertRun({
-    id: runId,
-    name: fixture.name,
-    event_name: fixture.eventName,
-    user_id: fixture.userId,
-    convo_id: fixture.convoId,
-    started_at: startWall,
-    last_updated_at: startWall + lastEnd,
-    metadata: JSON.stringify({ demo: true, default: true }),
-  });
-
-  for (const span of fixture.spans) {
-    const realSpanId = spanIdMap.get(span.id)!;
-    const realParentId = span.parentId ? spanIdMap.get(span.parentId) : undefined;
-    const startMs = startWall + span.startOffsetMs;
-    const endMs = startWall + span.endOffsetMs;
-    insertSpan({
-      id: realSpanId,
-      run_id: runId,
-      parent_span_id: realParentId,
-      name: span.name,
-      span_type: span.spanType,
-      status: span.status ?? "OK",
-      input_payload: span.inputPayload ?? span.attributes?.["ai.prompt.messages"]?.toString() ?? span.attributes?.["ai.toolCall.args"]?.toString(),
-      output_payload: span.outputPayload ?? span.attributes?.["ai.response.text"]?.toString() ?? span.attributes?.["ai.toolCall.result"]?.toString(),
-      start_time_ms: startMs,
-      end_time_ms: endMs,
-      duration_ms: endMs - startMs,
-      model: span.model,
-      provider: span.provider,
-      input_tokens: span.inputTokens,
-      output_tokens: span.outputTokens,
-      attributes: span.attributes ? JSON.stringify(span.attributes) : undefined,
-    });
-  }
-
-  for (const live of fixture.liveEvents) {
-    const realSpanId = spanIdMap.get(live.spanId)!;
-    upsertLiveEvent({
-      traceId: runId,
-      spanId: realSpanId,
-      type: live.type,
-      content: live.content,
-      timestamp: startWall + live.atOffsetMs,
-      metadata: live.metadata,
-    });
-  }
-
-  broadcast?.("spans", { runIds: [runId], count: fixture.spans.length });
 }

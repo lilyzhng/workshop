@@ -52,7 +52,7 @@ import {
   type AnnotationKind,
   type AnnotationSource,
 } from "./annotations";
-import { ensureDefaultDemoTraces, replayDefaultDemoTraces } from "./demo-traces";
+import { replayDefaultDemoTraces } from "./demo-traces";
 
 function parseAnnotationSource(value: unknown): AnnotationSource | null {
   return value === "user" || value === "claude-code" || value === "codex" ? value : null;
@@ -373,14 +373,6 @@ export async function createServer(port: number) {
   function backendUrl(): string {
     const addr = server.address() as AddressInfo | null;
     return `http://127.0.0.1:${addr?.port ?? port}`;
-  }
-
-  if (port !== 0) {
-    try {
-      ensureDefaultDemoTraces({ broadcast });
-    } catch (err) {
-      console.error("[workshop] default demo seed failed:", err);
-    }
   }
 
   function activeWorkspaceOrError(res: express.Response): ActiveWorkspace | null {

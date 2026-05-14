@@ -27,6 +27,22 @@ log_since() {
   tail -c "$((now - before))" "$DAEMON_LOG"
 }
 
+# Poll /health until the daemon responds or the deadline elapses. Stable
+# binaries' built-in `workshop start` boot wait is short enough that a
+# cold first-boot (sqlite migration replay + bun imports) can race past
+# it on ubuntu-latest under load — poll independently so the smoke test
+# doesn't depend on the binary's exit code.
+wait_for_health() {
+  local port="$1"
+  local timeout_s="${2:-60}"
+  local deadline=$((SECONDS + timeout_s))
+  while [ "$SECONDS" -lt "$deadline" ]; do
+    curl -fsS "http://localhost:$port/health" >/dev/null 2>&1 && return 0
+    sleep 0.5
+  done
+  return 1
+}
+
 cleanup() {
   set +e
   [ -n "${OLD_BIN:-}" ] && [ -x "$OLD_BIN" ] && "$OLD_BIN" workshop stop >/dev/null 2>&1
@@ -42,12 +58,15 @@ OLD_VER="$("$OLD_BIN" --version 2>&1 | head -1)"
 echo "   stable = $OLD_VER"
 
 echo "── 2/8 boot stable against $DB on :$PORT"
-"$OLD_BIN" workshop start
-for _ in $(seq 1 30); do
-  curl -fsS "http://localhost:$PORT/health" >/dev/null 2>&1 && break
-  sleep 0.5
-done
-curl -fsS "http://localhost:$PORT/health" >/dev/null
+# The daemon is detached and `child.unref`'d — it keeps coming up even when
+# `workshop start` reports a boot-wait timeout. `wait_for_health` is the
+# source of truth for readiness.
+"$OLD_BIN" workshop start || true
+wait_for_health "$PORT" 60 || {
+  echo "::error::stable daemon did not respond on :$PORT within 60s"
+  [ -f "$DAEMON_LOG" ] && tail -200 "$DAEMON_LOG"
+  exit 1
+}
 
 echo "── 3/8 seed fixtures via OTLP"
 RAINDROP_WORKSHOP_URL="http://localhost:$PORT" bun "$REPO_ROOT/scripts/seed-traces.ts"
@@ -104,12 +123,12 @@ if [ "$OLD_VER" = "$NEW_VER" ]; then
 fi
 
 echo "── 6/8 boot PR binary against the SAME db"
-"$NEW_BIN" workshop start
-for _ in $(seq 1 30); do
-  curl -fsS "http://localhost:$PORT/health" >/dev/null 2>&1 && break
-  sleep 0.5
-done
-curl -fsS "http://localhost:$PORT/health" >/dev/null
+"$NEW_BIN" workshop start || true
+wait_for_health "$PORT" 60 || {
+  echo "::error::PR daemon did not respond on :$PORT within 60s"
+  [ -f "$DAEMON_LOG" ] && tail -200 "$DAEMON_LOG"
+  exit 1
+}
 
 echo "── 7/8 verify migration preserved data"
 NEW_RUNS="$(curl -fsS "http://localhost:$PORT/api/runs?limit=5000" | jq 'length')"

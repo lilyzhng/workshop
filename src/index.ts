@@ -186,14 +186,16 @@ async function ensureDaemonRunning(): Promise<EnsureDaemonResult> {
   fs.writeFileSync(PORT_PATH, String(port));
   child.unref();
 
-  for (let i = 0; i < 50; i++) {
+  // 30s — cold-start sqlite migration replay + bun import on a loaded CI
+  // worker can run for several seconds before /health responds.
+  for (let i = 0; i < 300; i++) {
     await sleep(100);
     if (await isHealthy(port)) {
       return { alreadyRunning: false, pid: child.pid ?? null, requestedPort, port };
     }
   }
   throw new Error(
-    `workshop did not respond on :${port} within 5s — tail ${LOG_PATH} for details`
+    `workshop did not respond on :${port} within 30s — tail ${LOG_PATH} for details`
   );
 }
 
@@ -826,13 +828,11 @@ async function dispatchWorkshop(verb: string | undefined, rest: string[]): Promi
       // manual refresh between releases.
       process.exit(await cmdSync(process.argv.slice(3)));
       break;
-    case "drip":
-      // Temporarily disabled: importing ./drip pulls Ink/Yoga into Bun compile.
-      // const { cmdDrip } = await import("./drip");
-      // process.exit(await cmdDrip(process.argv.slice(3)));
-      console.error("raindrop drip is not available yet.");
-      process.exit(1);
+    case "drip": {
+      const { cmdDrip } = await import("./drip");
+      process.exit(await cmdDrip(process.argv.slice(3)));
       break;
+    }
     case "replay":
       process.exit(await dispatchReplay(process.argv[3], process.argv.slice(4)));
       break;

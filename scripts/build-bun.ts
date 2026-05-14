@@ -180,7 +180,6 @@ function buildOne(target: Target, version: string): string {
     "build",
     "--compile",
     "--minify",
-    "--bytecode",
     `--target=${target}`,
     `--define=__RAINDROP_VERSION__="${version}"`,
     ENTRY,
