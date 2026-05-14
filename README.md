@@ -1,8 +1,7 @@
 # Raindrop Workshop
 
-**The local debugger your agent is missing.** Watch your agent think — every
-token, every tool call, every decision streaming into `localhost:5899` the
-moment it happens.
+**The local debugger your agent is missing.** Watch your agent think locally,
+the moment it happens: every token, every tool call, every decision.
 
 Give Claude Code the power to read your traces, write evals against your
 codebase, and fix what's broken.
@@ -68,7 +67,6 @@ That's it. Traces stream into the UI the moment your agent runs.
 ## CLI
 
 ```bash
-raindrop setup             # wires Raindrop into your AI coding tools
 raindrop workshop          # start and open UI
 raindrop workshop setup    # write .env, then start and open
 raindrop workshop status   # check health

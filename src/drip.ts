@@ -20,7 +20,7 @@ interface DripItem {
 }
 
 const h = React.createElement;
-const GITHUB_REPO = "invisible-tools/raindrop-workshop";
+const GITHUB_REPO = "raindrop-ai/workshop";
 const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
 const DEFAULT_DRIP_ITEMS_URL = "https://www.raindrop.ai/api/drip-items";
 const DEFAULT_DRIP_CLAIM_URL = "https://www.raindrop.ai/api/drip-claims";
