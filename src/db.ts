@@ -179,7 +179,7 @@ function assertReadOnlyTraceQuery(sql: string): string {
   }
   // SQLite executes recursive CTEs even when the optional RECURSIVE keyword
   // is omitted. Until execution can be time-bounded, reject all CTE syntax.
-  if (/^with\b/i.test(withoutTrailingSemicolon)) {
+  if (/\bwith\b/i.test(withoutTrailingSemicolon)) {
     throw new Error("query_traces does not allow CTEs");
   }
   if (BLOCKED_QUERY_RE.test(withoutTrailingSemicolon)) {
