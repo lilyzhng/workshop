@@ -9,6 +9,10 @@ import { AlertCircle, Check, Chevron, Dots, Spinner } from "./Icons";
 import { Markdown } from "./Markdown";
 import { MessageList, messagesFromSpan } from "./MessageList";
 import { ToolCallPill } from "./ToolCallPill";
+import { AgentActionTag } from "./AgentActionTag";
+import { CollapsibleBlock, CollapsibleSection } from "./CollapsibleSection";
+import { useTheme } from "../themes/ThemeProvider";
+import { themeUsesAgentTags, themeUsesCompactUI } from "../themes/theme-config";
 import { extractLiveToolArgs } from "./chat-flow-live";
 import { useSmoothText } from "../hooks/use-smooth-text";
 
@@ -41,11 +45,11 @@ function PreviousMessages({ messages }: { messages: { role: string; content: str
   return (
     <div>
       <div className="flex items-center gap-3 py-3">
-        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <div className="flex-1 h-px" style={{ background: "var(--w-a18)" }} />
         <button
           className="flex flex-col items-center text-[11px] font-mono whitespace-pre leading-tight px-4 py-1 rounded-xl transition-all duration-200"
           style={{ color: C.fg2, background: "transparent" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; }}
+          onMouseEnter={e => { e.currentTarget.style.background = "var(--w-a08)"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           onClick={() => setExpanded(!expanded)}
         >
@@ -62,7 +66,7 @@ function PreviousMessages({ messages }: { messages: { role: string; content: str
             </>
           )}
         </button>
-        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <div className="flex-1 h-px" style={{ background: "var(--w-a18)" }} />
       </div>
       {expanded && <div className="mt-1"><MessageList messages={messages} /></div>}
     </div>
@@ -134,7 +138,7 @@ function SubAgentBlock({ agent, spans, onDiveIn }: { agent: SubAgent; spans: Spa
                 <div className="flex flex-wrap gap-1">
                   {agentToolSpans.map(s => (
                     <span key={s.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono"
-                      style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${C.border}`, color: C.fg3 }}>
+                      style={{ background: "var(--w-a04)", border: `1px solid ${C.border}`, color: C.fg3 }}>
                       <Check /> {s.name} <span style={{ color: C.fg0 }}>{fmt(s.duration_ms)}</span>
                     </span>
                   ))}
@@ -191,7 +195,7 @@ function UserBubble({ content, collapsible }: { content: string; collapsible?: b
         {content}
       </pre>
       {canCollapse && (
-        <button className="text-[10px] font-mono mt-0.5 px-1.5 py-0.5 -ml-1.5 rounded transition-colors hover:bg-white/10"
+        <button className="text-[10px] font-mono mt-0.5 px-1.5 py-0.5 -ml-1.5 rounded transition-colors theme-hover"
           style={{ color: C.fg1 }}
           onClick={() => setCollapsed(!collapsed)}>{collapsed ? "expand" : "collapse"}</button>
       )}
@@ -219,9 +223,9 @@ function UserMessage({ content, parts, onEdit }: { content: string; parts?: stri
           <button
             className="absolute -bottom-1.5 -right-1.5 p-1.5 rounded-full opacity-0 group-hover/usermsg:opacity-100 transition-opacity"
             style={{
-              background: "rgba(255,255,255,0.08)",
+              background: "var(--w-a08)",
               backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.15)",
+              border: "1px solid var(--w-a15)",
               boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
               color: C.fg2,
             }}
@@ -267,11 +271,11 @@ function RenderModeToggle({ md, onChange }: { md: boolean; onChange: (md: boolea
     background: "transparent",
   };
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-md px-1 py-0.5" style={{ border: `1px solid rgba(255,255,255,0.17)` }}>
+    <div className="inline-flex items-center gap-0.5 rounded-md px-1 py-0.5" style={{ border: `1px solid ${C.border}` }}>
       <button
         type="button"
         aria-pressed={md}
-        style={{ ...baseStyle, color: md ? "#b4c0c7" : C.fg0 }}
+        style={{ ...baseStyle, color: md ? C.fg3 : C.fg0 }}
         onClick={() => onChange(true)}
       >
         Markdown
@@ -280,7 +284,7 @@ function RenderModeToggle({ md, onChange }: { md: boolean; onChange: (md: boolea
       <button
         type="button"
         aria-pressed={!md}
-        style={{ ...baseStyle, color: !md ? "#b4c0c7" : C.fg0 }}
+        style={{ ...baseStyle, color: !md ? C.fg3 : C.fg0 }}
         onClick={() => onChange(false)}
       >
         Raw
@@ -391,6 +395,9 @@ export function ChatFlow({ spans, liveEvents, subAgents = EMPTY_SUB_AGENTS, onDi
   spans: Span[]; liveEvents: LiveEvent[]; subAgents?: SubAgent[]; onDiveIn?: (rootSpanId: string) => void; isActive?: boolean; lastUpdatedAt?: number; onEditMessage?: (content: string) => void; replayError?: { code: string; message: string } | null;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const compact = themeUsesCompactUI(theme);
+  const showAgentTags = themeUsesAgentTags(theme) && !compact;
   const colorMap = useMemo(() => new Map<string, string>(), []);
   const [md, setMd] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
@@ -597,7 +604,19 @@ export function ChatFlow({ spans, liveEvents, subAgents = EMPTY_SUB_AGENTS, onDi
 
   return (
     <div ref={scrollRef} className="space-y-1.5 py-2 pb-24">
-      <div className="px-3"><FlameTimeline spans={spans} /></div>
+      <div className="px-3">
+        {compact ? (
+          <CollapsibleSection
+            label="trajectory"
+            summary={`${spans.length} spans · ${fmt(spans.length ? spans[spans.length - 1].end_time_ms - spans[0].start_time_ms : 0)}`}
+            defaultOpen={false}
+          >
+            <FlameTimeline spans={spans} />
+          </CollapsibleSection>
+        ) : (
+          <FlameTimeline spans={spans} />
+        )}
+      </div>
       {(() => { let seenLLM = false; return items.map((item, i) => {
         const isFirstLLM = hasLLMOutput && item.type === "llm_out" && !seenLLM;
         if (item.type === "llm_out") seenLLM = true;
@@ -613,12 +632,12 @@ export function ChatFlow({ spans, liveEvents, subAgents = EMPTY_SUB_AGENTS, onDi
                 <span key={`lts${j}`} className="inline-flex items-center gap-1.5 py-1 rounded text-xs font-medium"
                   style={{ paddingLeft: 7, paddingRight: 12, background: `color-mix(in srgb, ${tc} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${tc} 20%, transparent)`, color: tc }}>
                   <Spinner style={{ marginRight: 3 }} />
-                  <span style={{ color: "#fff" }}>{lt.name}</span>
+                  <span style={{ color: C.fg4 }}>{lt.name}</span>
                   {lt.argsPreview && <span style={{ color: C.fg2, fontWeight: 400 }}>({lt.argsPreview})</span>}
                 </span>
               ) : lt.type === "live_tool_result" ? (
                 <span key={`ltr${j}`} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium"
-                  style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.border}`, color: C.fg2 }}>
+                  style={{ background: "var(--w-a02)", border: `1px solid ${C.border}`, color: C.fg2 }}>
                   <Check /> <span style={{ color: C.fg4 }}>{lt.name}</span>
                 </span>
               ) : null; })}
@@ -627,6 +646,23 @@ export function ChatFlow({ spans, liveEvents, subAgents = EMPTY_SUB_AGENTS, onDi
         }
 
         if (item.type === "system_msg") {
+          const systemPreview = item.content
+            ? item.content.slice(0, 80).replace(/\n/g, " ") + (item.content.length > 80 ? "…" : "")
+            : item.prevMessages
+              ? `${item.prevMessages.length} prior messages`
+              : "empty";
+          if (compact) {
+            return (
+              <div key={`sys${i}`} className="px-4">
+                <CollapsibleBlock label="system" summary={systemPreview} defaultOpen={false}>
+                  {item.content && <MessageList messages={[{ role: "system", content: item.content }]} compact />}
+                  {item.prevMessages && item.prevMessages.length > 0 && (
+                    <PreviousMessages messages={item.prevMessages} />
+                  )}
+                </CollapsibleBlock>
+              </div>
+            );
+          }
           return (
             <div key={`sys${i}`} className="px-4 space-y-1.5">
               {item.content && <MessageList messages={[{ role: "system", content: item.content }]} />}
@@ -646,7 +682,12 @@ export function ChatFlow({ spans, liveEvents, subAgents = EMPTY_SUB_AGENTS, onDi
           const isErr = s.status === "ERROR";
           return (
             <div key={`lo${i}`} className="px-4 py-2">
-              {isFirstLLM && (
+              {showAgentTags && (
+                <div className="mb-1.5">
+                  <AgentActionTag action="observe" />
+                </div>
+              )}
+              {isFirstLLM && !compact && (
                 <div className="flex justify-start mb-2" style={{ marginLeft: -6 }} data-testid="llm-render-mode-toolbar">
                   <RenderModeToggle md={md} onChange={handleMdChange} />
                 </div>

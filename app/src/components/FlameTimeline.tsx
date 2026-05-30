@@ -6,13 +6,13 @@ import type { Span } from "../utils/types";
 
 function spanTypeInfo(span: Span): { color: string; label: string } {
   if (span.span_type === "TRACE") return { color: C.purple, label: "TRACE" };
-  if (span.span_type === "TOOL_CALL") return { color: "#b08c5a", label: "TOOL" };
-  if (span.span_type?.includes("LLM")) return { color: C.fg1, label: "LLM" };
+  if (span.span_type === "TOOL_CALL") return { color: C.spanTool, label: "TOOL" };
+  if (span.span_type?.includes("LLM")) return { color: C.spanLlm, label: "LLM" };
   return { color: C.fg0, label: "SPAN" };
 }
 
-const LLM_BAR_COLOR = "rgba(255,255,255,0.38)";
-const LLM_LABEL_COLOR = "rgba(255,255,255,0.55)";
+const LLM_BAR_COLOR = C.timelineLlmBar;
+const LLM_LABEL_COLOR = C.timelineLlmLabel;
 
 function TooltipPayloadBlock({
   label,
@@ -38,7 +38,7 @@ function TooltipPayloadBlock({
         <div className="text-[9px] uppercase tracking-wide font-medium" style={{ color: C.fg0 }}>{label}</div>
         <button
           type="button"
-          className="flex-shrink-0 p-1 rounded transition-colors hover:bg-white/10"
+          className="flex-shrink-0 p-1 rounded transition-colors theme-hover"
           style={{ color: copied ? C.green : C.fg0 }}
           title="Copy"
           onClick={(e) => {
@@ -118,7 +118,7 @@ function SpanTooltip({
         <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded"
           style={{
             color: type.color,
-            background: "rgba(255,255,255,0.06)",
+            background: "var(--w-a06)",
           }}>
           {type.label}
         </span>
@@ -248,7 +248,7 @@ export function FlameTimeline({ spans }: { spans: Span[] }) {
   const gridMs = gridIntervals.find(g => dur / g <= targetGrids) ?? gridIntervals.at(-1)!;
 
   return (
-    <div ref={containerRef} className="rounded-lg mb-4" style={{ background: C.surface, border: `1px solid ${C.border}`, overflow: "hidden" }}>
+    <div ref={containerRef} className="flame-timeline-wrap rounded-lg mb-4" style={{ background: C.elevated, border: `1px solid ${C.border}`, overflow: "hidden" }}>
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5" style={{ borderBottom: `1px solid ${C.border}` }}>
         <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: C.fg1 }}>Trajectory</span>
@@ -315,7 +315,7 @@ export function FlameTimeline({ spans }: { spans: Span[] }) {
             const x = i * gridMs * pxPerMs;
             return (
               <Fragment key={i}>
-                <div style={{ position: "absolute", left: x, top: 0, bottom: AXIS_H, borderLeft: "1px solid rgba(255,255,255,0.04)" }} />
+                <div style={{ position: "absolute", left: x, top: 0, bottom: AXIS_H, borderLeft: "1px solid var(--w-a04)" }} />
                 {i > 0 && (
                   <div style={{ position: "absolute", left: x, bottom: 0, transform: "translateX(-50%)", fontSize: 9, color: C.fg0, fontFamily: "Space Mono, monospace" }}>
                     {fmt(i * gridMs)}
@@ -357,12 +357,12 @@ export function FlameTimeline({ spans }: { spans: Span[] }) {
             }
             return (
               <div key={span.id} className="timeline-bar absolute rounded-full flex items-center justify-center cursor-pointer"
-                style={{ left, top: row * ROW + BAR_Y_OFF, width: w, height: BAR_H, backgroundColor: isErr ? C.red : color, zIndex: idx, border: isLLM ? "1px solid rgba(255,255,255,0.12)" : "1.5px solid #000", boxSizing: "border-box" }}
+                style={{ left, top: row * ROW + BAR_Y_OFF, width: w, height: BAR_H, backgroundColor: isErr ? C.red : color, zIndex: idx, border: isLLM ? "1px solid var(--w-a12)" : "1.5px solid var(--w-bg)", boxSizing: "border-box" }}
                 onMouseEnter={(e) => handleBarEnter(span, e)}
                 onMouseLeave={handleBarLeave}
                 onClick={focusBarTool}>
                 {w >= 40 && (
-                  <span style={{ fontSize: 11, fontWeight: 500, color: isErr ? "#fff" : "#000", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", padding: "0 3px", display: "flex", alignItems: "center", gap: 3 }}>
+                  <span style={{ fontSize: 11, fontWeight: 500, color: isErr ? C.timelineBarLabel : isLLM ? C.fg4 : C.timelineBarLabel, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", padding: "0 3px", display: "flex", alignItems: "center", gap: 3 }}>
                     {isErr && (
                       <svg width="10" height="10" viewBox="0 0 14 13" style={{ flexShrink: 0 }}>
                         <polygon points="7,0 14,13 0,13" fill="#fff" />

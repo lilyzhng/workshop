@@ -4,6 +4,9 @@ import { C, spanColor } from "../utils/colors";
 import { argsPreview, fmt, trunc, tryJson } from "../utils/helpers";
 import { getNormalizedTool, type Span } from "../utils/types";
 import { JsonView } from "./JsonView";
+import { AgentActionTag, spanToAgentAction } from "./AgentActionTag";
+import { useTheme } from "../themes/ThemeProvider";
+import { themeUsesAgentTags, themeUsesCompactUI } from "../themes/theme-config";
 
 function approxTokens(s: string | null | undefined): string | null {
   if (!s || s.length < 20) return null;
@@ -17,6 +20,9 @@ export function ToolCallPill({ span, colorMap }: { span: Span; colorMap: Map<str
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const showAgentTags = themeUsesAgentTags(theme) && !themeUsesCompactUI(theme);
+  const agentAction = spanToAgentAction(span);
   const err = span.status === "ERROR";
   const name = getNormalizedTool(span)?.name ?? span.name;
   const pending = span.status === "UNSET" && !span.end_time_ms;
@@ -54,17 +60,18 @@ export function ToolCallPill({ span, colorMap }: { span: Span; colorMap: Map<str
       }}
     >
       <button
-        className={`inline-flex items-center gap-1.5 ${pending ? '' : 'px-2.5'} py-1 rounded text-xs font-medium transition-colors w-fit max-w-full`}
+        className={`inline-flex items-center gap-1.5 ${pending ? '' : 'px-2.5'} py-1 rounded text-xs font-medium transition-colors w-fit max-w-full agent-tool-pill`}
         style={{
           ...(pending ? { paddingLeft: 7, paddingRight: 12 } : {}),
-          background: err ? "rgba(204,85,85,0.08)" : pending ? `color-mix(in srgb, ${color} 12%, transparent)` : "rgba(255,255,255,0.08)",
+          background: err ? "rgba(204,85,85,0.08)" : pending ? `color-mix(in srgb, ${color} 12%, transparent)` : "var(--w-a08)",
           color: err ? C.red : pending ? color : C.fg2,
-          border: `1px solid ${err ? "rgba(204,85,85,0.15)" : pending ? `color-mix(in srgb, ${color} 20%, transparent)` : "rgba(255,255,255,0.15)"}`,
+          border: `1px solid ${err ? "rgba(204,85,85,0.15)" : pending ? `color-mix(in srgb, ${color} 20%, transparent)` : "var(--w-a15)"}`,
         }}
         onClick={() => setOpen(!open)}
       >
+        {showAgentTags && agentAction && <AgentActionTag action={agentAction} />}
         {icon}
-        <span style={{ color: err ? undefined : pending ? "#fff" : C.fg4 }}>{name}</span>
+        <span style={{ color: err ? undefined : pending ? C.fg4 : C.fg4 }}>{name}</span>
         {preview && (
           <span className="truncate max-w-[200px]" style={{ color: C.fg0, fontSize: "10px" }}>({preview})</span>
         )}

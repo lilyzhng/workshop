@@ -4,6 +4,9 @@ import { fmt, tryJson, detectProvider } from "../utils/helpers";
 import type { Span } from "../utils/types";
 import { Chevron } from "./Icons";
 import { JsonView } from "./JsonView";
+import { AgentActionTag, spanToAgentAction } from "./AgentActionTag";
+import { useTheme } from "../themes/ThemeProvider";
+import { themeUsesAgentTags, themeUsesCompactUI } from "../themes/theme-config";
 import { AnnotationChip, KIND_STYLES, SOURCE_GLYPH, annotationSourceLabel } from "./AnnotationChip";
 import { InlineCreateForm } from "./TraceAnnotations";
 import type { Annotation, AnnotationKind } from "../hooks/use-annotations";
@@ -20,7 +23,7 @@ function CollapsibleSection({ title, preview, data, maxExpand = 3 }: { title: st
         {!open && <span className="text-[10px] font-mono truncate flex-1" style={{ color: C.fg0 }}>{preview}</span>}
       </button>
       {open && (
-        <div className="mt-1 p-2 rounded" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.border}` }}>
+        <div className="mt-1 p-2 rounded" style={{ background: "var(--w-a02)", border: `1px solid ${C.border}` }}>
           <JsonView data={data} maxExpand={maxExpand} />
         </div>
       )}
@@ -33,7 +36,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       className="text-[10px] font-mono px-1.5 py-0.5 rounded transition"
-      style={{ color: copied ? C.green : C.fg0, background: "rgba(255,255,255,0.03)" }}
+      style={{ color: copied ? C.green : C.fg0, background: "var(--w-a03)" }}
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
     >
       {copied ? "copied" : "copy"}
@@ -43,8 +46,8 @@ function CopyButton({ text }: { text: string }) {
 
 const TYPE_LABEL: Record<string, { color: string; label: string }> = {
   TRACE: { color: C.purple, label: "TRACE" },
-  TOOL_CALL: { color: "#b08c5a", label: "TOOL" },
-  LLM_GENERATION: { color: "#5a8ab0", label: "LLM" },
+  TOOL_CALL: { color: C.spanTool, label: "TOOL" },
+  LLM_GENERATION: { color: C.spanLlm, label: "LLM" },
   INTERNAL: { color: C.fg0, label: "SPAN" },
 };
 
@@ -63,6 +66,9 @@ function SpanRow({ span, depth, minTime, totalDur, selected, flashing, onClick, 
   freshIds: Set<string>;
   onClearFresh: (id: string) => void;
 }) {
+  const { theme } = useTheme();
+  const showAgentTags = themeUsesAgentTags(theme) && !themeUsesCompactUI(theme);
+  const agentAction = spanToAgentAction(span);
   const info = typeInfo(span);
   const color = info.color;
   const isErr = span.status === "ERROR";
@@ -75,8 +81,8 @@ function SpanRow({ span, depth, minTime, totalDur, selected, flashing, onClick, 
       className="flex items-center cursor-pointer"
       style={{
         minHeight: 28,
-        borderBottom: "1px solid rgba(255,255,255,0.03)",
-        background: flashing ? "rgba(96,165,250,0.15)" : selected ? "rgba(255,255,255,0.04)" : isErr ? "rgba(204,102,102,0.04)" : "transparent",
+        borderBottom: "1px solid var(--w-a03)",
+        background: flashing ? "rgba(96,165,250,0.15)" : selected ? "var(--w-a04)" : isErr ? "rgba(204,102,102,0.04)" : "transparent",
         borderLeft: flashing ? `2px solid #60a5fa` : selected ? `2px solid ${C.fg2}` : isErr ? `2px solid ${C.red}` : "2px solid transparent",
         transition: "background 0.4s ease, border-left 0.4s ease",
       }}
@@ -84,9 +90,13 @@ function SpanRow({ span, depth, minTime, totalDur, selected, flashing, onClick, 
       onContextMenu={onContextMenu ? (e) => { e.preventDefault(); onContextMenu(e, span); } : undefined}
     >
       <div className="flex items-center gap-1.5 flex-shrink-0" style={{ width: 220, paddingLeft: depth * 14 + 8, minWidth: 220 }}>
-        <span className="text-[10px] font-mono font-bold px-1 py-0.5 rounded" style={{ color: info.color, background: `${info.color}12` }}>
-          {info.label}
-        </span>
+        {showAgentTags && agentAction ? (
+          <AgentActionTag action={agentAction} />
+        ) : (
+          <span className="text-[10px] font-mono font-bold px-1 py-0.5 rounded" style={{ color: info.color, background: `${info.color}12` }}>
+            {info.label}
+          </span>
+        )}
         <span className="text-[11px] font-mono truncate" style={{ color: isErr ? C.red : C.fg3 }} title={span.name}>
           {span.name}
         </span>
@@ -133,7 +143,7 @@ function SpanDetail({ span }: { span: Span }) {
             {info.label}
           </span>
           {isErr && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ color: C.red, background: "rgba(204,102,102,0.1)" }}>ERROR</span>}
-          {(() => { const p = detectProvider(span.model, span.provider); return p ? <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded" style={{ color: C.fg1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>{p.label}</span> : null; })()}
+          {(() => { const p = detectProvider(span.model, span.provider); return p ? <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded" style={{ color: C.fg1, background: "var(--w-a06)", border: "1px solid var(--w-a08)" }}>{p.label}</span> : null; })()}
         </div>
         <div className="text-sm font-mono font-medium" style={{ color: C.fg4 }}>{span.name}</div>
       </div>
@@ -231,7 +241,7 @@ function SpanDetail({ span }: { span: Span }) {
             <div className="text-[10px] uppercase tracking-wide font-medium" style={{ color: C.fg1 }}>Input</div>
             <CopyButton text={tryJson(span.input_payload) ?? span.input_payload} />
           </div>
-          <div className="p-2 rounded" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.border}` }}>
+          <div className="p-2 rounded" style={{ background: "var(--w-a02)", border: `1px solid ${C.border}` }}>
             <JsonView data={span.input_payload} />
           </div>
         </div>
@@ -244,7 +254,7 @@ function SpanDetail({ span }: { span: Span }) {
             <div className="text-[10px] uppercase tracking-wide font-medium" style={{ color: C.fg1 }}>Output</div>
             <CopyButton text={tryJson(span.output_payload) ?? span.output_payload} />
           </div>
-          <div className="p-2 rounded" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${C.border}` }}>
+          <div className="p-2 rounded" style={{ background: "var(--w-a02)", border: `1px solid ${C.border}` }}>
             <JsonView data={span.output_payload} />
           </div>
         </div>
@@ -435,7 +445,7 @@ export function SpanTree({
                   {(annotationsBySpan.get(span.id) ?? []).map((a) => {
                     const st = KIND_STYLES[a.kind];
                     return (
-                      <div key={a.id} style={{ padding: "7px 9px", border: `1px solid ${st.border}`, background: `linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015)), ${st.bg}`, borderRadius: 8, display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <div key={a.id} style={{ padding: "7px 9px", border: `1px solid ${st.border}`, background: `linear-gradient(180deg, var(--w-a035), rgba(255,255,255,0.015)), ${st.bg}`, borderRadius: 8, display: "flex", alignItems: "flex-start", gap: 8 }}>
                         <div style={{ flex: 1, fontSize: 11, color: C.fg4, lineHeight: 1.45 }}>
                           <span style={{ color: C.fg0, fontSize: 10, marginRight: 6 }}>
                             {SOURCE_GLYPH[a.source]} {annotationSourceLabel(a.source)}
@@ -518,7 +528,7 @@ function SpanContextMenu({ x, y, onClose, onMarkKind, onAddNote }: {
               padding: "6px 12px", background: "transparent", border: 0, color: C.fg3,
               cursor: "pointer", textAlign: "left",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--w-a04)")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             <span style={{ width: 14, textAlign: "center", color: s.fg, fontWeight: 700 }}>{s.icon}</span>

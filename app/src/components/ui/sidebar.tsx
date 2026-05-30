@@ -314,7 +314,7 @@ const SidebarInset = React.forwardRef<
     <main
       ref={ref}
       className={cn(
-        "relative flex h-svh flex-1 min-w-0 flex-col overflow-hidden bg-[#000]",
+        "relative flex h-svh flex-1 min-w-0 flex-col overflow-hidden bg-[var(--w-bg)] text-[color:var(--w-fg0)]",
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
         className
       )}
@@ -333,7 +333,7 @@ const SidebarInput = React.forwardRef<
       ref={ref}
       data-sidebar="input"
       className={cn(
-        "h-8 w-full bg-white/5 shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+        "h-8 w-full bg-[var(--w-a05)] shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
         className
       )}
       {...props}
@@ -575,7 +575,7 @@ const SidebarMenuButton = React.forwardRef<
           side="right"
           align="center"
           hidden={state !== "collapsed" || isMobile}
-          className={isActive ? "bg-[#252525] text-white" : "text-white/60"}
+          className={isActive ? "bg-[var(--w-tooltip-bg)] text-[color:var(--w-tooltip-fg)]" : "text-[color:var(--w-fg1)]"}
           {...tooltip}
         />
       </Tooltip>

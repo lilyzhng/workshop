@@ -1,0 +1,285 @@
+/**
+ * Agent Computer — Light design language (product UI + marketing)
+ *
+ * Extracted from agentcomputer.ai references:
+ * - Desktop: warm neutral grey (#F0F0F0)
+ * - Surfaces: white cards, soft shadow, 12px radius
+ * - Type: Barlow sans (UI chrome), Space Mono (logs/code/status)
+ * - Accent: electric blue #3355FF
+ * - Tags: pastel OBSERVE / ACT / WAIT pills
+ * - Borders: 1px rgba(0,0,0,0.08) grid lines, no blur/glass on light
+ */
+
+[data-theme="agent-light"] {
+  /* Typography */
+  --w-font-sans: "Barlow", system-ui, -apple-system, sans-serif;
+  --w-font-mono: "Space Mono", ui-monospace, monospace;
+  --w-font-display: "Barlow", system-ui, sans-serif;
+
+  /* Layout */
+  --w-radius-panel: 12px;
+  --w-radius-control: 8px;
+  --w-radius-tag: 4px;
+  --w-panel-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --w-panel-shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.08);
+
+  /* Surfaces — grey desktop, white windows */
+  --w-bg: #f0f0f0;
+  --w-surface: #ffffff;
+  --w-elevated: #fafafa;
+
+  /* Ink hierarchy */
+  --w-fg0: #999999;
+  --w-fg1: #666666;
+  --w-fg2: #444444;
+  --w-fg3: #222222;
+  --w-fg4: #1a1a1a;
+  --w-fg5: #0a0a0a;
+
+  --w-accent: #3355ff;
+  --w-cyan: #3355ff;
+  --w-user: #eef2ff;
+
+  /* Span / timeline semantics (replace dark-theme hardcoded hues) */
+  --w-span-tool: #3355ff;
+  --w-span-llm: #6366f1;
+  --w-timeline-llm-bar: rgba(51, 85, 255, 0.28);
+  --w-timeline-llm-label: rgba(51, 85, 255, 0.75);
+  --w-timeline-bar-label: #ffffff;
+  --w-timeline-track-bg: rgba(0, 0, 0, 0.04);
+
+  /* Syntax-ish accents in logs */
+  --w-syntax-flag: #ea580c;
+  --w-syntax-success: #16a34a;
+  --w-syntax-key: #be185d;
+
+  --streamdown-body: #1a1a1a;
+  --streamdown-fg: rgba(26, 26, 26, 0.88);
+  --streamdown-bg: #ffffff;
+
+  /* Typography — 3 sizes only */
+  --w-text-xs: 11px;
+  --w-text-sm: 12px;
+  --w-text-md: 14px;
+}
+
+/* Base typography */
+[data-theme="agent-light"] body {
+  font-family: var(--w-font-sans);
+  font-size: var(--w-text-sm);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Flatten font-size sprawl inside trace + header */
+[data-theme="agent-light"] .run-trace-pane,
+[data-theme="agent-light"] .agent-run-header {
+  font-size: var(--w-text-sm);
+}
+
+[data-theme="agent-light"] .run-trace-pane .text-[9px],
+[data-theme="agent-light"] .run-trace-pane .text-[10px],
+[data-theme="agent-light"] .agent-run-header .text-[9px],
+[data-theme="agent-light"] .agent-run-header .text-[10px] {
+  font-size: var(--w-text-xs) !important;
+}
+
+[data-theme="agent-light"] .run-trace-pane .text-[11px],
+[data-theme="agent-light"] .run-trace-pane .text-[12px],
+[data-theme="agent-light"] .run-trace-pane .text-[13px],
+[data-theme="agent-light"] .agent-run-header .text-[11px],
+[data-theme="agent-light"] .agent-run-header .text-[12px] {
+  font-size: var(--w-text-sm) !important;
+}
+
+[data-theme="agent-light"] .agent-run-header h2,
+[data-theme="agent-light"] .agent-run-header .agent-run-title {
+  font-size: var(--w-text-md) !important;
+  font-weight: 600;
+}
+
+/* Collapsible sections */
+[data-theme="agent-light"] .collapsible-section-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  font-family: var(--w-font-mono);
+  font-size: var(--w-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--w-fg1);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--w-radius-control);
+  transition: background 0.15s ease;
+}
+
+[data-theme="agent-light"] .collapsible-section-trigger:hover {
+  background: var(--w-a04);
+}
+
+[data-theme="agent-light"] .collapsible-section-label {
+  color: var(--w-fg2);
+}
+
+[data-theme="agent-light"] .collapsible-section-summary {
+  margin-left: auto;
+  font-weight: 400;
+  color: var(--w-fg0);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+[data-theme="agent-light"] .collapsible-section-body {
+  padding: 0 4px 8px;
+}
+
+/* Header — icon-only action buttons */
+[data-theme="agent-light"] .agent-header-actions .agent-action-label {
+  display: none;
+}
+
+[data-theme="agent-light"] .agent-header-actions button {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+[data-theme="agent-light"] .agent-header-compact-meta {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-text-xs);
+  color: var(--w-fg0);
+}
+
+[data-theme="agent-light"] .agent-details-toggle {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-text-xs);
+  color: var(--w-fg1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--w-border);
+  background: var(--w-elevated);
+  cursor: pointer;
+}
+
+[data-theme="agent-light"] .agent-details-toggle:hover {
+  background: var(--w-a06);
+}
+
+[data-theme="agent-light"] .font-mono,
+[data-theme="agent-light"] pre,
+[data-theme="agent-light"] code,
+[data-theme="agent-light"] .status-pill {
+  font-family: var(--w-font-mono);
+}
+
+/* Display titles — Barlow, not AlphaLyrae */
+[data-theme="agent-light"] .w-display-font {
+  font-family: var(--w-font-display) !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Nav + sidebar — lowercase labels like AC */
+[data-theme="agent-light"] [data-sidebar="sidebar"] {
+  border-right: 1px solid var(--w-border);
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.03);
+}
+
+/* White panels on grey desktop */
+[data-theme="agent-light"] .agent-panel {
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  box-shadow: var(--w-panel-shadow);
+}
+
+[data-theme="agent-light"] .run-trace-pane {
+  background: var(--w-surface);
+  margin: 8px;
+  border-radius: var(--w-radius-panel);
+  border: 1px solid var(--w-border);
+  box-shadow: var(--w-panel-shadow);
+}
+
+[data-theme="agent-light"] .run-trace-pane .text-message,
+[data-theme="agent-light"] .run-trace-pane [data-streamdown] {
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--w-fg3);
+}
+
+/* Trajectory timeline card */
+[data-theme="agent-light"] .flame-timeline-wrap {
+  background: var(--w-elevated);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-control);
+  padding: 8px 4px 4px;
+}
+
+/* Tool pills — log row style */
+[data-theme="agent-light"] .agent-tool-pill {
+  font-family: var(--w-font-mono);
+  font-size: 11px;
+  border-radius: var(--w-radius-control);
+  border: 1px solid var(--w-border);
+  background: var(--w-elevated);
+}
+
+/* Tabs — thick underline active state */
+[data-theme="agent-light"] .agent-tab-active {
+  color: var(--w-fg4) !important;
+  border-bottom: 2px solid var(--w-fg4) !important;
+}
+
+/* Metadata chips */
+[data-theme="agent-light"] .agent-meta-chip {
+  font-family: var(--w-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--w-fg1);
+  background: var(--w-elevated);
+  border: 1px solid var(--w-border);
+  border-radius: 4px;
+}
+
+/* Ask Claude FAB — white card, not dark glass */
+[data-theme="agent-light"] [data-ask-fab] {
+  border: 1px solid var(--w-border-light) !important;
+  background: var(--w-surface) !important;
+  color: var(--w-fg4) !important;
+  box-shadow: var(--w-panel-shadow-lg) !important;
+  font-family: var(--w-font-sans);
+}
+
+[data-theme="agent-light"] [data-ask-fab]:hover {
+  border-color: var(--w-accent) !important;
+  color: var(--w-accent) !important;
+}
+
+[data-theme="agent-light"] [data-ask-fab] svg {
+  color: var(--w-fg4) !important;
+}
+
+/* Activity / stream blocks — theme-aware text */
+[data-theme="agent-light"] .activity-content pre {
+  color: var(--w-fg2);
+}
+
+[data-theme="agent-light"] .activity-kicker {
+  color: var(--w-fg0);
+}
+
+/* Hover utilities — dark-theme white overlays → light overlays */
+[data-theme="agent-light"] .theme-hover:hover {
+  background: var(--w-a06) !important;
+}
+
+[data-theme="agent-light"] .hover\:bg-white\/15:hover {
+  background: var(--w-a08) !important;
+}

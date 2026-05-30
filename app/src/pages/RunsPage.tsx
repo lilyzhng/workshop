@@ -228,18 +228,21 @@ export function RunsPage() {
   }, [filtered, handleSelectRun, selectedId]);
 
   return (
-    <div className="h-full flex">
+    <div className="h-full flex bg-[var(--w-bg)]">
       {/* Run list sidebar */}
-      <div className="w-[248px] flex-shrink-0 flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="p-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="w-[248px] flex-shrink-0 flex flex-col agent-panel bg-[var(--w-surface)]" style={{ borderRight: "1px solid var(--w-a06)" }}>
+        <div className="p-3" style={{ borderBottom: "1px solid var(--w-a06)" }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5">
-              {/* WebSocket connection indicator */}
-              <div className="w-1.5 h-1.5 rounded-full" title={wsConnected ? "Connected" : "Disconnected"}
-                style={{ background: wsConnected ? C.green : C.red, opacity: wsConnected ? 0.6 : 1 }} />
-              <span className="text-[10px] font-mono" style={{ color: C.fg0 }}>{wsConnected ? "connected" : "disconnected"}</span>
+              <span
+                className={`text-[10px] font-mono ${wsConnected ? "status-pill status-pill--running" : "status-pill status-pill--error"}`}
+                title={wsConnected ? "Connected" : "Disconnected"}
+              >
+                <span className="status-pill-dot" aria-hidden />
+                {wsConnected ? "connected" : "disconnected"}
+              </span>
             </div>
-            <button className="text-[10px] transition hover:text-red-400" style={{ color: "#5a6a72" }} onClick={handleClear}>
+            <button className="text-[10px] transition hover:text-red-400" style={{ color: C.fg0 }} onClick={handleClear}>
               clear
             </button>
           </div>
@@ -248,7 +251,7 @@ export function RunsPage() {
             <input
               ref={searchRef}
               className="w-full px-2 py-1.5 rounded text-[11px] font-mono outline-none"
-              style={{ background: "rgba(255,255,255,0.04)", color: C.fg3, border: `1px solid ${search ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)"}` }}
+              style={{ background: "var(--w-a04)", color: C.fg3, border: `1px solid ${search ? "var(--w-a12)" : "var(--w-a06)"}` }}
               placeholder="Search runs..."
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -265,7 +268,7 @@ export function RunsPage() {
             <div className="relative mb-2">
               <select
                 className="w-full appearance-none px-2 py-1.5 pr-6 rounded text-[11px] font-mono outline-none cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.04)", color: agentFilter === "all" ? C.fg1 : C.fg3, border: `1px solid ${agentFilter !== "all" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)"}` }}
+                style={{ background: "var(--w-a04)", color: agentFilter === "all" ? C.fg1 : C.fg3, border: `1px solid ${agentFilter !== "all" ? "var(--w-a12)" : "var(--w-a06)"}` }}
                 value={agentFilter}
                 onChange={e => setAgentFilter(e.target.value)}
               >
@@ -281,7 +284,7 @@ export function RunsPage() {
 
         <div ref={listRef} className="flex-1 overflow-auto p-2 space-y-0.5 sb">
           {filtered.length === 0
-              ? <div className="text-center text-xs mt-8" style={{ color: "#5a6a72" }}>
+              ? <div className="text-center text-xs mt-8" style={{ color: C.fg0 }}>
                   {search ? "No matching runs" : "No runs"}
                 </div>
               : filtered.map(run => (
@@ -325,7 +328,7 @@ export function RunsPage() {
                           {/* Replay (left) header */}
                           <div
                             className="flex items-center justify-between px-3 py-1.5 min-w-0"
-                            style={{ background: "rgba(255,255,255,0.10)", width: replayCompare ? "50%" : "100%" }}
+                            style={{ background: "var(--w-a10)", width: replayCompare ? "50%" : "100%" }}
                           >
                             <div className="flex items-center gap-2 min-w-0">
                               <RotateCcw style={{ width: 12, height: 12, color: C.fg1, flexShrink: 0 }} />
@@ -350,8 +353,8 @@ export function RunsPage() {
                               </span>
                               {!replayCompare && (
                                 <button
-                                  className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded transition-colors hover:bg-white/10 flex-shrink-0"
-                                  style={{ color: C.fg2, border: `1px solid rgba(255,255,255,0.15)` }}
+                                  className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded transition-colors theme-hover flex-shrink-0"
+                                  style={{ color: C.fg2, border: `1px solid var(--w-a15)` }}
                                   onClick={() => setReplayCompare(true)}>
                                   compare <ArrowRight className="w-3 h-3" />
                                 </button>
@@ -365,13 +368,13 @@ export function RunsPage() {
                               <div className="flex-shrink-0 w-[1px]" style={{ background: C.border }} />
                               <div
                                 className="flex items-center justify-between px-3 py-1.5 min-w-0"
-                                style={{ background: "rgba(255,255,255,0.04)", flex: 1 }}
+                                style={{ background: "var(--w-a04)", flex: 1 }}
                               >
                                 <span className="text-[12px] truncate" style={{ color: C.fg1 }}>
                                   original — <span style={{ color: C.fg3 }}>{srcName}</span>
                                 </span>
                                 <button
-                                  className="p-0.5 rounded transition-colors hover:bg-white/10 flex-shrink-0"
+                                  className="p-0.5 rounded transition-colors theme-hover flex-shrink-0"
                                   onClick={() => setReplayCompare(false)}
                                 >
                                   <X className="h-3.5 w-3.5" style={{ color: C.fg1 }} />

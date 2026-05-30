@@ -28,6 +28,8 @@ import { saveEvent, removeSavedEvent, updateSavedEvent, isEventSaved, getSavedEv
 import { parseMessages } from "./MessageList";
 import { AnnotationCreatePopover, TraceAnnotations } from "./TraceAnnotations";
 import { useAnnotations } from "../hooks/use-annotations";
+import { useTheme } from "../themes/ThemeProvider";
+import { themeUsesCompactUI } from "../themes/theme-config";
 import type { Annotation, AnnotationKind } from "../hooks/use-annotations";
 import { useAgentForEvent } from "../hooks/use-agents";
 import { useWorkshopEvent } from "../hooks/use-workshop-ws";
@@ -165,7 +167,7 @@ function ErrorsTooltip({ spans }: { spans: Span[] }) {
               <div key={s.id} className="px-3 py-2" style={{ borderBottom: idx < errorSpans.length - 1 ? "1px solid rgba(235,20,20,0.1)" : "none" }}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-mono font-bold px-1 py-0.5 rounded"
-                    style={{ color: s.span_type === "TOOL_CALL" ? "#b08c5a" : s.span_type?.includes("LLM") ? "#5a8ab0" : C.fg0, background: "rgba(255,255,255,0.05)" }}>
+                    style={{ color: s.span_type === "TOOL_CALL" ? "#b08c5a" : s.span_type?.includes("LLM") ? "#5a8ab0" : C.fg0, background: "var(--w-a05)" }}>
                     {s.span_type === "TOOL_CALL" ? "TOOL" : s.span_type?.includes("LLM") ? "LLM" : "SPAN"}
                   </span>
                   <span className="text-[11px] font-mono truncate" style={{ color: C.red }}>{s.name}</span>
@@ -193,7 +195,7 @@ function Badge({ label, copyValue }: { label: string; copyValue?: string }) {
 
   if (!copyValue) {
     return (
-      <span className="text-[9px] font-medium uppercase tracking-wide px-1 rounded" style={{ background: "rgba(255,255,255,0.09)", color: C.fg0, lineHeight: "16px" }}>
+      <span className="text-[9px] font-medium uppercase tracking-wide px-1 rounded" style={{ background: "var(--w-a09)", color: C.fg0, lineHeight: "16px" }}>
         {label}
       </span>
     );
@@ -203,7 +205,7 @@ function Badge({ label, copyValue }: { label: string; copyValue?: string }) {
     <button
       type="button"
       className="text-[9px] font-medium uppercase tracking-wide px-1 rounded transition-[color,background-color,transform] active:scale-[0.96]"
-      style={{ background: copied ? "rgba(96,227,109,0.12)" : "rgba(255,255,255,0.09)", color: copied ? C.green : C.fg0, lineHeight: "16px" }}
+      style={{ background: copied ? "rgba(96,227,109,0.12)" : "var(--w-a09)", color: copied ? C.green : C.fg0, lineHeight: "16px" }}
       title={`Copy ${label}`}
       aria-label={`Copy ${label}`}
       onClick={(event) => {
@@ -328,7 +330,7 @@ function MoreMenu({ runId, deleteRedirectPath = "/runs" }: { runId?: string; del
   return (
     <div ref={ref} className="relative">
       <button
-        className="flex items-center justify-center w-7 h-7 rounded-md transition-colors hover:bg-white/10"
+        className="flex items-center justify-center w-7 h-7 rounded-md transition-colors theme-hover"
         style={{ color: C.fg1 }}
         onClick={() => setOpen(!open)}
       >
@@ -336,9 +338,9 @@ function MoreMenu({ runId, deleteRedirectPath = "/runs" }: { runId?: string; del
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-1 z-50 rounded-lg overflow-hidden shadow-xl"
-          style={{ background: "rgba(20,20,20,0.85)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.12)", minWidth: 140 }}>
+          style={{ background: "var(--w-popover-bg)", backdropFilter: "blur(16px)", border: "1px solid var(--w-a12)", minWidth: 140 }}>
           <button
-            className="w-full text-left px-3 py-2 text-[11px] transition-colors hover:bg-white/5"
+            className="w-full text-left px-3 py-2 text-[11px] transition-colors theme-hover-subtle"
             style={{ color: C.red }}
             onClick={handleDelete}
           >
@@ -369,7 +371,7 @@ function InlineEdit({ value, onConfirm, className, style, inputStyle }: {
     return (
       <span className="inline-flex items-center gap-1">
         <input ref={inputRef} className={`outline-none ${className ?? ""}`}
-          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 4, padding: "1px 6px", ...style, ...inputStyle }}
+          style={{ background: "var(--w-a08)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 4, padding: "1px 6px", ...style, ...inputStyle }}
           value={draft} onChange={e => setDraft(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter") { onConfirm(draft); setEditing(false); } if (e.key === "Escape") setEditing(false); }}
           onBlur={() => setEditing(false)}
@@ -542,8 +544,18 @@ function ViewHeader({
     return () => document.removeEventListener("mousedown", handler);
   }, [optionsOpen]);
   const displayTitle = cleanTitle(title);
+  const { theme } = useTheme();
+  const compact = themeUsesCompactUI(theme);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const liveDur = active && startedAt ? Date.now() - startedAt : stats.dur;
+  const durSec = Math.max(0, Math.round(liveDur / 1000));
+  const compactMeta = [
+    stats.tools > 0 ? `${stats.tools} tool${stats.tools !== 1 ? "s" : ""}` : null,
+    `${durSec}s`,
+  ].filter(Boolean).join(" · ");
+
   return (
-    <div className="flex-shrink-0" style={{ padding: isReplay ? "8px 16px" : "10px 16px", borderBottom: `1px solid ${C.border}` }}>
+    <div className="flex-shrink-0 agent-run-header" style={{ padding: isReplay ? "8px 16px" : compact ? "8px 16px" : "10px 16px", borderBottom: `1px solid ${C.border}` }}>
       {parentName && onBack ? (
         <>
           <div><Button onClick={onBack}>&larr; Show Parent Agent</Button></div>
@@ -555,9 +567,9 @@ function ViewHeader({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <h2 style={{ fontSize: "18px", fontWeight: 600, color: C.fg5 }}>{displayTitle}</h2>
-                {model && <span className="text-[10px] px-2 py-0.5 rounded font-mono" style={{ background: "rgba(255,255,255,0.04)", color: C.fg1 }}>{model}</span>}
+                {model && <span className="text-[10px] px-2 py-0.5 rounded font-mono" style={{ background: "var(--w-a04)", color: C.fg1 }}>{model}</span>}
                 <span className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                  style={{ background: active ? "rgba(102,170,187,0.1)" : "rgba(255,255,255,0.03)", color: active ? C.green : C.fg0 }}>
+                  style={{ background: active ? "rgba(102,170,187,0.1)" : "var(--w-a03)", color: active ? C.green : C.fg0 }}>
                   {active ? "Active" : "Done"}
                 </span>
               </div>
@@ -569,7 +581,7 @@ function ViewHeader({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[12px] font-medium" style={{ color: C.fg3 }}>{displayTitle}</span>
-            {model && <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: "rgba(255,255,255,0.04)", color: C.fg0 }}>{model}</span>}
+            {model && <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: "var(--w-a04)", color: C.fg0 }}>{model}</span>}
             <span style={{ color: C.fg0, opacity: 0.4 }}>|</span>
             <StatsLine stats={stats} model={model} spans={allSpans} active={active} startedAt={startedAt} />
           </div>
@@ -578,25 +590,37 @@ function ViewHeader({
       ) : (
         <>
           <div className="flex items-center mb-1 justify-between gap-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${active ? "pulse-dot" : ""}`} style={{ background: active ? C.green : "rgba(255,255,255,0.18)" }} title={active ? "Active" : "Done"} />
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${active ? "pulse-dot" : ""}`} style={{ background: active ? C.green : "var(--w-a18)" }} title={active ? "Active" : "Done"} />
               {onFork && !active ? (
                 <InlineEdit value={displayTitle}
                   onConfirm={() => {}}
-                  className="text-[15px] font-semibold truncate" style={{ color: C.fg4 }}
+                  className="agent-run-title text-[15px] font-semibold truncate" style={{ color: C.fg4 }}
                   inputStyle={{ fontSize: 15, fontWeight: 600, color: C.fg4 }} />
               ) : (
-                <h2 className="truncate" style={{ fontSize: "15px", fontWeight: 600, color: C.fg4 }}>{displayTitle}</h2>
+                <h2 className="agent-run-title truncate" style={{ fontSize: "15px", fontWeight: 600, color: C.fg4 }}>{displayTitle}</h2>
+              )}
+              {compact && (
+                <>
+                  <span className="agent-header-compact-meta hidden sm:inline">{compactMeta}</span>
+                  <button
+                    type="button"
+                    className="agent-details-toggle"
+                    onClick={() => setDetailsOpen((v) => !v)}
+                  >
+                    {detailsOpen ? "hide" : "details"}
+                  </button>
+                </>
               )}
             </div>
             {!active && (
-              <div ref={optionsRef} className="relative flex items-center gap-1.5">
+              <div ref={optionsRef} className="relative flex items-center gap-1.5 agent-header-actions">
                 {onAnnotateRun && (
                   <>
                     <button
                       ref={annotationBtnRef}
-                      className="flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-md font-medium transition-colors hover:bg-white/10"
-                      style={{ color: C.fg3, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+                      className="flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-md font-medium transition-colors theme-hover"
+                      style={{ color: C.fg3, background: "var(--w-a06)", border: "1px solid var(--w-a10)" }}
                       onClick={() => {
                         setSavePopoverOpen(false);
                         setOptionsOpen(false);
@@ -605,7 +629,7 @@ function ViewHeader({
                       title="Annotate run"
                     >
                       <Pencil className="h-3 w-3" />
-                      Annotate
+                      <span className="agent-action-label">Annotate</span>
                     </button>
                     {annotationPopoverOpen && (
                       <AnnotationCreatePopover
@@ -617,8 +641,8 @@ function ViewHeader({
                   </>
                 )}
                 <button
-                  className="flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-md font-medium transition-colors hover:bg-white/10"
-                  style={{ color: C.fg3, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+                  className="flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-md font-medium transition-colors theme-hover"
+                  style={{ color: C.fg3, background: "var(--w-a06)", border: "1px solid var(--w-a10)" }}
                   onClick={() => {
                     setSavePopoverOpen(false);
                     setAnnotationPopoverOpen(false);
@@ -628,12 +652,12 @@ function ViewHeader({
                   title="Debug with Claude Code"
                 >
                   <MessageCircle className="h-3 w-3" />
-                  Debug
+                  <span className="agent-action-label">Debug</span>
                 </button>
                 <button
                   ref={saveBtnRef}
                   className="flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-md font-medium transition-colors"
-                  style={{ color: isSaved ? C.green : C.fg3, background: isSaved ? "rgba(96,227,109,0.08)" : "rgba(255,255,255,0.06)", border: `1px solid ${isSaved ? "rgba(96,227,109,0.2)" : "rgba(255,255,255,0.1)"}` }}
+                  style={{ color: isSaved ? C.green : C.fg3, background: isSaved ? "rgba(96,227,109,0.08)" : "var(--w-a06)", border: `1px solid ${isSaved ? "rgba(96,227,109,0.2)" : "var(--w-a10)"}` }}
                   onClick={() => {
                     setAnnotationPopoverOpen(false);
                     if (!isSaved) handleSave();
@@ -642,7 +666,7 @@ function ViewHeader({
                   title={isSaved ? "Move folder or unsave" : "Save run"}
                 >
                   <Bookmark className="h-3 w-3" style={isSaved ? { fill: C.green } : {}} />
-                  {isSaved ? "Saved" : "Save"}
+                  <span className="agent-action-label">{isSaved ? "Saved" : "Save"}</span>
                 </button>
                 {savePopoverOpen && (
                   <SavePopover
@@ -656,12 +680,12 @@ function ViewHeader({
                 {onFork && (() => {
                   return <>
                   {/* Split button: Replay | ▾ */}
-                  <div className="flex items-stretch rounded-md overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.1)` }}>
+                  <div className="flex items-stretch rounded-md overflow-hidden" style={{ border: `1px solid var(--w-a10)` }}>
                     <button
-                      className="flex items-center gap-1.5 text-[11px] px-3 py-1 font-medium transition-colors hover:bg-white/10"
+                      className="flex items-center gap-1.5 text-[11px] px-3 py-1 font-medium transition-colors theme-hover"
                       style={{
                         color: C.fg3,
-                        background: "rgba(255,255,255,0.06)",
+                        background: "var(--w-a06)",
                       }}
                       onClick={() => {
                         if (agentConfigured) {
@@ -672,11 +696,11 @@ function ViewHeader({
                       }}
                     >
                       <RotateCcw className="h-3 w-3" />
-                      Replay
+                      <span className="agent-action-label">Replay</span>
                     </button>
                     <button
-                      className="flex items-center justify-center px-1.5 transition-colors hover:bg-white/10"
-                      style={{ color: C.fg1, background: "rgba(255,255,255,0.06)", borderLeft: "1px solid rgba(255,255,255,0.1)" }}
+                      className="flex items-center justify-center px-1.5 transition-colors theme-hover"
+                      style={{ color: C.fg1, background: "var(--w-a06)", borderLeft: "1px solid var(--w-a10)" }}
                       onClick={() => {
                         setAnnotationPopoverOpen(false);
                         setOptionsOpen(!optionsOpen);
@@ -699,7 +723,7 @@ function ViewHeader({
                         el.style.top = `${btn.bottom + 4}px`;
                         el.style.right = `${window.innerWidth - btn.right}px`;
                       }}
-                      style={{ background: "rgba(20,20,20,0.75)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.12)", boxShadow: "0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)", width: "min(384px, calc(100vw - 32px))" }}>
+                      style={{ background: "var(--w-popover-bg)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--w-a12)", boxShadow: "0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px var(--w-a05)", width: "min(384px, calc(100vw - 32px))" }}>
                       {/* Local Agent setup CTA when not configured */}
                       {!agentConfigured && (
                         <LocalAgentSetupCTA eventName={run?.event_name ?? undefined} />
@@ -709,15 +733,15 @@ function ViewHeader({
                         <div className="text-[10px] font-medium mb-1" style={{ color: C.fg0 }}>Model</div>
                         <select
                           className="w-full px-2 py-1.5 rounded text-[11px] font-mono outline-none appearance-none"
-                          style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+                          style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
                           value={forkModel}
                           onChange={e => setForkModel(e.target.value)}
                         >
-                          <option value="" style={{ background: "#111", color: "#e8e8e8" }}>
+                          <option value="" style={{ background: "var(--w-select-bg)", color: "var(--w-select-fg)" }}>
                             {traceModelFromMetadata ? `Use trace default (${traceModelFromMetadata})` : "Use trace default model"}
                           </option>
                           {forkModelOptions.map((candidate) => (
-                            <option key={candidate} value={candidate} style={{ background: "#111", color: "#e8e8e8" }}>
+                            <option key={candidate} value={candidate} style={{ background: "var(--w-select-bg)", color: "var(--w-select-fg)" }}>
                               {candidate === traceModelFromMetadata ? `${candidate} (original trace model)` : candidate}
                             </option>
                           ))}
@@ -728,7 +752,7 @@ function ViewHeader({
                         <div className="text-[10px] font-medium mb-1" style={{ color: C.fg0 }}>User message</div>
                         <textarea
                           className="w-full px-2 py-1.5 rounded text-[11px] font-mono outline-none resize-y"
-                          style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: `1px solid rgba(255,255,255,0.1)`, minHeight: 60, maxHeight: 200 }}
+                          style={{ background: "var(--w-a06)", color: C.fg3, border: `1px solid var(--w-a10)`, minHeight: 60, maxHeight: 200 }}
                           value={forkMsg}
                           onChange={e => setForkMsg(e.target.value)}
                           placeholder="Enter user message..."
@@ -744,7 +768,7 @@ function ViewHeader({
                                 <span className="text-[10px] font-mono flex-shrink-0 w-24 truncate" style={{ color: C.fg1 }} title={key}>{key}</span>
                                 <input
                                   className="flex-1 min-w-0 px-2 py-1 rounded text-[10px] font-mono outline-none"
-                                  style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+                                  style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
                                   value={val}
                                   onChange={e => setContextEdits(prev => ({ ...prev, [key]: e.target.value }))}
                                 />
@@ -756,9 +780,9 @@ function ViewHeader({
                       <button
                         className="w-full py-1.5 rounded text-[11px] font-medium transition-colors hover:brightness-110"
                         style={{
-                          background: "rgba(255,255,255,0.08)",
+                          background: "var(--w-a08)",
                           color: C.fg4,
-                          border: `1px solid rgba(255,255,255,0.1)`,
+                          border: `1px solid var(--w-a10)`,
                         }}
                         onClick={() => {
                           if (!agentConfigured) {
@@ -783,6 +807,7 @@ function ViewHeader({
               </div>
             )}
           </div>
+          {(!compact || detailsOpen) && (
           <div className="flex items-center gap-1.5 text-[11px] flex-wrap">
             <StatsLine stats={stats} model={model} spans={allSpans} active={active} startedAt={startedAt} />
             {run && (run.id || run.user_id || run.convo_id) && (
@@ -796,6 +821,7 @@ function ViewHeader({
               </>
             )}
           </div>
+          )}
         </>
       )}
     </div>
@@ -867,8 +893,8 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="rounded-xl p-4 space-y-4 w-full max-w-md"
         style={{
-          background: "rgba(20,20,20,0.85)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-          border: "1px solid rgba(255,255,255,0.12)", boxShadow: "0 16px 48px rgba(0,0,0,0.5)",
+          background: "var(--w-popover-bg)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+          border: "1px solid var(--w-a12)", boxShadow: "0 16px 48px rgba(0,0,0,0.5)",
         }}>
         <div className="text-[13px] font-medium" style={{ color: C.fg3 }}>Edit &amp; Replay</div>
 
@@ -877,15 +903,15 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
           <div className="text-[10px] font-medium mb-1" style={{ color: C.fg0 }}>Model</div>
           <select
             className="w-full px-2.5 py-2 rounded-lg text-[11px] font-mono outline-none appearance-none"
-            style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+            style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
             value={mdl}
             onChange={e => setMdl(e.target.value)}
           >
-            <option value="" style={{ background: "#111", color: "#e8e8e8" }}>
+            <option value="" style={{ background: "var(--w-select-bg)", color: "var(--w-select-fg)" }}>
               {traceModelFromMetadata ? `Use trace default (${traceModelFromMetadata})` : "Use trace default model"}
             </option>
             {modalModelOptions.map((candidate) => (
-              <option key={candidate} value={candidate} style={{ background: "#111", color: "#e8e8e8" }}>
+              <option key={candidate} value={candidate} style={{ background: "var(--w-select-bg)", color: "var(--w-select-fg)" }}>
                 {candidate === traceModelFromMetadata ? `${candidate} (original trace model)` : candidate}
               </option>
             ))}
@@ -898,7 +924,7 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
           <textarea
             autoFocus
             className="w-full px-2.5 py-2 rounded-lg text-[11px] font-mono outline-none resize-y"
-            style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)", minHeight: 100, maxHeight: 300 }}
+            style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)", minHeight: 100, maxHeight: 300 }}
             value={msg} onChange={e => setMsg(e.target.value)}
             placeholder="Enter user message..."
           />
@@ -914,7 +940,7 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
                   <span className="text-[10px] font-mono flex-shrink-0 w-28 truncate" style={{ color: C.fg1 }} title={key}>{key}</span>
                   <input
                     className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg text-[10px] font-mono outline-none"
-                    style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+                    style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
                     value={val}
                     onChange={e => setContextEdits(prev => ({ ...prev, [key]: e.target.value }))}
                   />
@@ -927,8 +953,8 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
         {/* Actions */}
         <div className="flex justify-end gap-2">
           <button
-            className="px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors hover:bg-white/10"
-            style={{ color: C.fg1, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+            className="px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors theme-hover"
+            style={{ color: C.fg1, background: "var(--w-a04)", border: "1px solid var(--w-a08)" }}
             onClick={onClose}
           >
             Cancel
@@ -937,8 +963,8 @@ function EditReplayModal({ userMessage, model, runId, eventName, traceModelFromM
             className="px-4 py-1.5 rounded-lg text-[11px] font-medium transition-colors hover:brightness-110"
             style={{
               color: C.fg4,
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.15)",
+              background: "var(--w-a10)",
+              border: "1px solid var(--w-a15)",
             }}
             onClick={handleReplay}
           >
@@ -956,8 +982,8 @@ function ScrollToBottomButton() {
   const [pressed, setPressed] = useState(false);
   const spring = useSpring({
     transform: `translateX(-50%) translateY(${hovered ? -2 : 0}px) scale(${pressed ? 0.97 : hovered ? 1.04 : 1})`,
-    background: hovered ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.09)",
-    borderColor: hovered ? "rgba(255,255,255,0.24)" : "rgba(255,255,255,0.14)",
+    background: hovered ? "var(--w-a14)" : "var(--w-a09)",
+    borderColor: hovered ? "var(--w-a24)" : "var(--w-a14)",
     boxShadow: hovered ? "0 8px 24px rgba(0,0,0,0.26)" : "0 4px 14px rgba(0,0,0,0.18)",
     config: { tension: 360, friction: 24 },
   });
@@ -989,19 +1015,19 @@ function TraceNotFound({ runId, backPath }: { runId: string; backPath: string })
   return (
     <div className="flex h-full items-center justify-center px-6">
       <div className="max-w-sm text-center">
-        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full border border-white/10 bg-white/[0.04]">
+        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full border border-[color:var(--w-a10)] bg-[var(--w-a04)]">
           <SearchX className="h-5 w-5" style={{ color: C.fg1 }} />
         </div>
         <div className="text-[15px] font-medium" style={{ color: C.fg4, fontFamily: '"AlphaLyrae", sans-serif' }}>Trace not found</div>
         <div className="mt-2 text-sm leading-relaxed" style={{ color: C.fg1 }}>
           This trace is not available in the current workspace. It may have been deleted, cleared, or opened from a different project.
         </div>
-        <code className="mt-3 block truncate rounded-md border border-white/10 bg-black/20 px-2 py-1.5 text-[11px]" style={{ color: C.fg0 }}>
+        <code className="mt-3 block truncate rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a08)] px-2 py-1.5 text-[11px]" style={{ color: C.fg0 }}>
           {runId}
         </code>
         <button
           type="button"
-          className="mt-4 rounded-md border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/70 transition-colors hover:bg-white/[0.10] hover:text-white"
+          className="mt-4 rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a06)] px-3 py-1.5 text-xs font-medium text-[color:var(--w-fg2)] transition-colors theme-hover hover:text-[color:var(--w-fg4)]"
           onClick={() => navigate(backPath, { replace: true })}
         >
           Back to traces
@@ -1305,7 +1331,7 @@ export function RunDetail({ runId, routeBase, initialData, isReplay, source, onF
             <SpanTree spans={agentSpans} />
           </div>
         ) : (
-          <StickToBottom className="flex-1 relative min-h-0" resize="smooth" initial={false} contextRef={stickToBottomContextRef}>
+          <StickToBottom className="flex-1 relative min-h-0 run-trace-pane" resize="smooth" initial={false} contextRef={stickToBottomContextRef}>
             <StickToBottom.Content className="sb">
               {agentTab === "chat" && <ChatFlow spans={agentSpans} liveEvents={[]} subAgents={[]} onDiveIn={setFocusedAgent} />}
             </StickToBottom.Content>
@@ -1383,7 +1409,7 @@ export function RunDetail({ runId, routeBase, initialData, isReplay, source, onF
           />
         </div>
       ) : (
-        <StickToBottom className="flex-1 relative min-h-0" resize="smooth" initial={false} contextRef={stickToBottomContextRef}>
+        <StickToBottom className="flex-1 relative min-h-0 run-trace-pane" resize="smooth" initial={false} contextRef={stickToBottomContextRef}>
           <StickToBottom.Content className="sb">
             {activeTab === "chat" && <ChatFlow spans={spans} liveEvents={liveEvents} subAgents={subAgents} onDiveIn={setFocusedAgent} isActive={active} lastUpdatedAt={run.last_updated_at} onEditMessage={onForkStarted && !active ? (msg) => setEditModal({ userMessage: msg }) : undefined} replayError={replayMeta?.replay?.error ?? null} />}
             {activeTab === "convo" && run.convo_id && (

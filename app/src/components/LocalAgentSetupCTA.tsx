@@ -42,7 +42,7 @@ function InlineSetupCTA({ eventName, title, description }: { eventName?: string;
 
   return (
     <div className="rounded-lg p-3 space-y-2"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+      style={{ background: "var(--w-a03)", border: "1px solid var(--w-a08)" }}>
       <div className="text-[11px] font-medium" style={{ color: C.fg3 }}>
         {resolvedTitle}
       </div>
@@ -52,8 +52,8 @@ function InlineSetupCTA({ eventName, title, description }: { eventName?: string;
       <button
         className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-[11px] font-medium transition-colors"
         style={{
-          background: copied ? "rgba(96,227,109,0.12)" : "rgba(255,255,255,0.08)",
-          border: `1px solid ${copied ? "rgba(96,227,109,0.25)" : "rgba(255,255,255,0.12)"}`,
+          background: copied ? "rgba(96,227,109,0.12)" : "var(--w-a08)",
+          border: `1px solid ${copied ? "rgba(96,227,109,0.25)" : "var(--w-a12)"}`,
           color: copied ? C.green : C.fg3,
         }}
         onClick={copy}
@@ -119,7 +119,7 @@ export function SetupReplayModal({ open, onClose, eventName }: SetupReplayModalP
       >
         {/* Close button */}
         <button
-          className="absolute right-3 top-3 p-1.5 rounded-md transition-colors hover:bg-white/10"
+          className="absolute right-3 top-3 p-1.5 rounded-md transition-colors theme-hover"
           style={{ color: C.fg1 }}
           onClick={onClose}
         >
@@ -147,8 +147,8 @@ export function SetupReplayModal({ open, onClose, eventName }: SetupReplayModalP
           <button
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-[13px] font-medium transition-all"
             style={{
-              background: copied ? "rgba(96,227,109,0.15)" : "rgba(255,255,255,0.1)",
-              border: `1px solid ${copied ? "rgba(96,227,109,0.3)" : "rgba(255,255,255,0.15)"}`,
+              background: copied ? "rgba(96,227,109,0.15)" : "var(--w-a10)",
+              border: `1px solid ${copied ? "rgba(96,227,109,0.3)" : "var(--w-a15)"}`,
               color: copied ? C.green : "#fff",
             }}
             onClick={copy}
@@ -158,7 +158,7 @@ export function SetupReplayModal({ open, onClose, eventName }: SetupReplayModalP
           </button>
 
           <div className="text-[11px] text-center" style={{ color: C.fg0 }}>
-            Using Claude Code? Just run <code className="font-mono px-1.5 py-0.5 rounded" style={{ background: "rgba(255,255,255,0.08)", color: C.fg2 }}>/setup-agent-replay</code>
+            Using Claude Code? Just run <code className="font-mono px-1.5 py-0.5 rounded" style={{ background: "var(--w-a08)", color: C.fg2 }}>/setup-agent-replay</code>
           </div>
         </div>
       </div>

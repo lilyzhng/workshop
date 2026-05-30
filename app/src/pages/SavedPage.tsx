@@ -367,7 +367,7 @@ function FolderPills({ folders, selected, onSelect, onCreate, onDelete }: {
     >
       <button
         className="shrink-0 px-2 py-0.5 rounded text-[10px] transition-colors"
-        style={{ background: selected === null ? "rgba(255,255,255,0.08)" : "transparent", color: selected === null ? C.fg3 : C.fg0 }}
+        style={{ background: selected === null ? "var(--w-a08)" : "transparent", color: selected === null ? C.fg3 : C.fg0 }}
         onClick={() => onSelect(null)}
       >All</button>
       {folders.map(f => {
@@ -378,7 +378,7 @@ function FolderPills({ folders, selected, onSelect, onCreate, onDelete }: {
           <div key={f} className="relative shrink-0 flex items-center">
             <button
               className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] transition-colors"
-              style={{ background: isActive ? "rgba(255,255,255,0.08)" : "transparent", color: isActive ? C.fg3 : C.fg0 }}
+              style={{ background: isActive ? "var(--w-a08)" : "transparent", color: isActive ? C.fg3 : C.fg0 }}
               onClick={() => onSelect(isActive ? null : f)}
             >
               <div className="w-2 h-2 rounded-full" style={{ background: fc }} />
@@ -388,7 +388,7 @@ function FolderPills({ folders, selected, onSelect, onCreate, onDelete }: {
                   role="button"
                   tabIndex={0}
                   aria-label={isConfirming ? `Confirm delete folder ${f}` : `Delete folder ${f}`}
-                  className="ml-0.5 px-1 -mr-1 rounded hover:bg-white/10"
+                  className="ml-0.5 px-1 -mr-1 rounded theme-hover"
                   style={{ color: isConfirming ? "#ff7a7a" : C.fg0 }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -406,7 +406,7 @@ function FolderPills({ folders, selected, onSelect, onCreate, onDelete }: {
         <input
           autoFocus
           className="shrink-0 px-1.5 py-0.5 rounded text-[10px] outline-none w-24"
-          style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+          style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
           value={newName}
           onChange={e => setNewName(e.target.value)}
           onBlur={submitNew}
@@ -419,7 +419,7 @@ function FolderPills({ folders, selected, onSelect, onCreate, onDelete }: {
         />
       ) : (
         <button
-          className="shrink-0 px-1.5 py-0.5 rounded text-[10px] transition-colors hover:bg-white/[0.06]"
+          className="shrink-0 px-1.5 py-0.5 rounded text-[10px] transition-colors theme-hover-subtle"
           style={{ color: C.fg0 }}
           aria-label="Add folder"
           onClick={() => setShowNew(true)}
@@ -456,7 +456,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
         <input
           aria-label="Search saved runs"
           className="w-full pl-6 pr-6 py-1 rounded text-[11px] outline-none"
-          style={{ background: "rgba(255,255,255,0.04)", color: C.fg3, border: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ background: "var(--w-a04)", color: C.fg3, border: "1px solid var(--w-a06)" }}
           placeholder="Search saved runs…"
           value={filters.search}
           onChange={e => onUpdate({ search: e.target.value })}
@@ -464,7 +464,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
         {filters.search && (
           <button
             aria-label="Clear search"
-            className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-white/10"
+            className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded theme-hover"
             style={{ color: C.fg0 }}
             onClick={() => onUpdate({ search: "" })}
           ><X className="h-2.5 w-2.5" /></button>
@@ -475,9 +475,9 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
         aria-label="Open filters"
         className="shrink-0 flex items-center gap-1 px-2 py-1 rounded text-[10px] transition-colors"
         style={{
-          background: activeCount > 0 ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
+          background: activeCount > 0 ? "var(--w-a08)" : "var(--w-a04)",
           color: activeCount > 0 ? C.fg3 : C.fg2,
-          border: "1px solid rgba(255,255,255,0.06)",
+          border: "1px solid var(--w-a06)",
         }}
         onClick={() => setPopOpen(v => !v)}
       >
@@ -494,7 +494,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
             el.style.right = `${window.innerWidth - r.right}px`;
           }}
           className="fixed z-[9999] rounded-lg p-2.5 shadow-xl space-y-2"
-          style={{ background: "rgba(20,20,20,0.92)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.12)", width: 220 }}
+              style={{ background: "var(--w-popover-bg)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--w-a12)", boxShadow: "var(--w-popover-shadow)", width: 220 }}
         >
           <div>
             <div className="text-[10px] mb-1" style={{ color: C.fg0 }}>Agent</div>
@@ -502,7 +502,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
               <select
                 aria-label="Filter by agent"
                 className="w-full appearance-none pl-2 pr-5 py-1 rounded text-[11px] outline-none cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.08)" }}
+                style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a08)" }}
                 value={filters.agent}
                 onChange={e => onUpdate({ agent: e.target.value })}
               >
@@ -514,7 +514,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
           </div>
           <div>
             <div className="text-[10px] mb-1" style={{ color: C.fg0 }}>Source</div>
-            <div role="radiogroup" aria-label="Filter by source" className="flex rounded overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div role="radiogroup" aria-label="Filter by source" className="flex rounded overflow-hidden" style={{ border: "1px solid var(--w-a08)" }}>
               {(["all", "local", "cloud"] as const).map(opt => (
                 <button
                   key={opt}
@@ -522,7 +522,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
                   aria-checked={filters.source === opt}
                   className="flex-1 py-1 text-[10px] transition-colors"
                   style={{
-                    background: filters.source === opt ? "rgba(255,255,255,0.1)" : "transparent",
+                    background: filters.source === opt ? "var(--w-a10)" : "transparent",
                     color: filters.source === opt ? C.fg3 : C.fg1,
                   }}
                   onClick={() => onUpdate({ source: opt })}
@@ -532,7 +532,7 @@ function FilterBar({ filters, agents, onUpdate, onResetSecondary }: {
           </div>
           {activeCount > 0 && (
             <button
-              className="w-full text-[10px] py-1 rounded transition-colors hover:bg-white/[0.06]"
+              className="w-full text-[10px] py-1 rounded transition-colors theme-hover-subtle"
               style={{ color: C.fg0 }}
               onClick={onResetSecondary}
             >Reset</button>
@@ -557,8 +557,8 @@ function ActiveFilterChips({ filters, onUpdate }: {
       {chips.map(c => (
         <button
           key={c.key}
-          className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] transition-colors hover:bg-white/[0.06]"
-          style={{ background: "rgba(255,255,255,0.04)", color: C.fg2, border: "1px solid rgba(255,255,255,0.08)" }}
+          className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] transition-colors theme-hover-subtle"
+          style={{ background: "var(--w-a04)", color: C.fg2, border: "1px solid var(--w-a08)" }}
           onClick={c.clear}
           aria-label={`Clear ${c.key} filter`}
         >
@@ -617,10 +617,10 @@ export function SavePopover({ onSave, onClose, anchorRef, currentFolder, onUnsav
     return (
       <button
         key={value ?? "__unfiled"}
-        className="w-full text-left px-2 py-1.5 rounded text-[11px] flex items-center gap-1.5 transition-colors hover:bg-white/[0.06]"
+        className="w-full text-left px-2 py-1.5 rounded text-[11px] flex items-center gap-1.5 transition-colors theme-hover-subtle"
         style={{
           color: selected ? C.fg5 : C.fg3,
-          background: selected ? "rgba(255,255,255,0.05)" : "transparent",
+          background: selected ? "var(--w-a05)" : "transparent",
         }}
         onClick={() => { onSave(value ?? undefined); onClose(); }}
       >
@@ -641,7 +641,7 @@ export function SavePopover({ onSave, onClose, anchorRef, currentFolder, onUnsav
         el.style.right = `${window.innerWidth - btn.right}px`;
       }}
       className="fixed z-[9999] rounded-lg p-2.5 shadow-xl space-y-1"
-      style={{ background: "rgba(20,20,20,0.85)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.12)", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", width: 220 }}
+      style={{ background: "var(--w-popover-bg)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--w-a12)", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", width: 220 }}
     >
       <div className="text-[10px] px-2 py-1" style={{ color: C.fg0 }}>
         {isSaved ? "Move to folder" : "Save to folder"}
@@ -654,23 +654,23 @@ export function SavePopover({ onSave, onClose, anchorRef, currentFolder, onUnsav
       ))}
       {showNew ? (
         <div className="flex gap-1">
-          <input autoFocus className="flex-1 min-w-0 px-2 py-1 rounded text-[11px] outline-none" style={{ background: "rgba(255,255,255,0.06)", color: C.fg3, border: "1px solid rgba(255,255,255,0.1)" }}
+          <input autoFocus className="flex-1 min-w-0 px-2 py-1 rounded text-[11px] outline-none" style={{ background: "var(--w-a06)", color: C.fg3, border: "1px solid var(--w-a10)" }}
             placeholder="Folder name..." value={newFolder} onChange={e => setNewFolder(e.target.value)}
             onKeyDown={e => { if (e.key === "Enter" && newFolder.trim()) { addFolder(newFolder.trim()); onSave(newFolder.trim()); onClose(); } }} />
-          <button className="px-2 py-1 rounded text-[10px] font-medium" style={{ background: "rgba(255,255,255,0.08)", color: C.fg3 }}
+          <button className="px-2 py-1 rounded text-[10px] font-medium" style={{ background: "var(--w-a08)", color: C.fg3 }}
             onClick={() => { if (newFolder.trim()) { addFolder(newFolder.trim()); onSave(newFolder.trim()); onClose(); } }}>
             {isSaved ? "Move" : "Save"}
           </button>
         </div>
       ) : (
-        <button className="w-full text-left px-2 py-1.5 rounded text-[11px] flex items-center gap-1.5 transition-colors hover:bg-white/[0.06]" style={{ color: C.fg0 }}
+        <button className="w-full text-left px-2 py-1.5 rounded text-[11px] flex items-center gap-1.5 transition-colors theme-hover-subtle" style={{ color: C.fg0 }}
           onClick={() => setShowNew(true)}>
           <FolderPlus className="h-3 w-3" /> New folder...
         </button>
       )}
       {onUnsave && (
         <>
-          <div className="my-1 -mx-1.5 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }} />
+          <div className="my-1 -mx-1.5 border-t" style={{ borderColor: "var(--w-a08)" }} />
           <button className="w-full text-left px-2 py-1.5 rounded text-[11px] flex items-center gap-1.5 transition-colors"
             style={{ color: "#ff7a7a" }}
             onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,107,107,0.1)"; }}
@@ -774,8 +774,8 @@ export function SavedPage() {
   return (
     <div className="h-full flex relative">
 
-      <div className={`w-80 flex-shrink-0 flex flex-col ${isEmpty ? "opacity-40 pointer-events-none" : ""}`} style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="p-3 space-y-2" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className={`w-80 flex-shrink-0 flex flex-col ${isEmpty ? "opacity-40 pointer-events-none" : ""}`} style={{ borderRight: "1px solid var(--w-a06)" }}>
+        <div className="p-3 space-y-2" style={{ borderBottom: "1px solid var(--w-a06)" }}>
           <div className="flex items-center justify-between">
             <div className="text-[14px]" style={{ fontFamily: '"AlphaLyrae", sans-serif', color: C.fg3 }}>Saved Runs</div>
             <div className="text-[10px]" style={{ color: C.fg0 }}>
@@ -831,7 +831,7 @@ export function SavedPage() {
 
       {isEmpty && (
         <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="text-center space-y-3 max-w-xs px-4 py-6 rounded-xl" style={{ background: "rgba(0,0,0,0.8)", border: "1px solid rgba(255,255,255,0.1)" }}>
+          <div className="text-center space-y-3 max-w-xs px-4 py-6 rounded-xl" style={{ background: "rgba(0,0,0,0.8)", border: "1px solid var(--w-a10)" }}>
             <Bookmark className="mx-auto h-8 w-8" style={{ color: C.fg1 }} />
             <div className="text-sm font-medium" style={{ color: C.fg3 }}>No Saved Runs</div>
             <div className="text-[11px] leading-relaxed" style={{ color: C.fg1 }}>
@@ -872,11 +872,11 @@ function SavedListItem({ event, selected, onClick, onRemove, onMove }: {
       <button
         className="w-full text-left px-3 py-2.5 rounded-lg transition-all duration-150"
         style={{
-          background: selected ? "rgba(255,255,255,0.08)" : "transparent",
-          border: selected ? "1px solid rgba(255,255,255,0.15)" : "1px solid transparent",
+          background: selected ? "var(--w-a08)" : "transparent",
+          border: selected ? "1px solid var(--w-a15)" : "1px solid transparent",
         }}
-        onMouseEnter={(e) => { if (!selected) e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = selected ? "rgba(255,255,255,0.08)" : "transparent"; }}
+        onMouseEnter={(e) => { if (!selected) e.currentTarget.style.background = "var(--w-a04)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = selected ? "var(--w-a08)" : "transparent"; }}
         onClick={onClick}
       >
         <div className="min-w-0 overflow-hidden">
@@ -885,7 +885,7 @@ function SavedListItem({ event, selected, onClick, onRemove, onMove }: {
           </div>
           {annotationPreview && (
             <div className="mt-1.5 flex min-w-0 items-start gap-1.5 rounded-md px-2 py-1.5 text-[10px] leading-snug"
-              style={{ background: "rgba(255,255,255,0.04)", color: C.fg2, border: "1px solid rgba(255,255,255,0.06)" }}>
+              style={{ background: "var(--w-a04)", color: C.fg2, border: "1px solid var(--w-a06)" }}>
               <MessageSquareText className="mt-0.5 h-3 w-3 shrink-0" style={{ color: C.fg1 }} />
               <span className="line-clamp-2">
                 {annotationPreview.note
@@ -904,8 +904,8 @@ function SavedListItem({ event, selected, onClick, onRemove, onMove }: {
             )}
             <span className="text-[10px] font-medium px-1.5 py-px rounded-full shrink-0" style={
               event.source === "cloud"
-                ? { background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.25)" }
-                : { background: "transparent", color: C.fg3, border: "1px solid rgba(255,255,255,0.28)" }
+                ? { background: "var(--w-a12)", color: "#fff", border: "1px solid rgba(255,255,255,0.25)" }
+                : { background: "transparent", color: C.fg3, border: "1px solid var(--w-a28)" }
             }>
               {event.source === "cloud" ? "Prod" : "Local"}
             </span>
@@ -925,7 +925,7 @@ function SavedListItem({ event, selected, onClick, onRemove, onMove }: {
       <div className="absolute top-1/2 -translate-y-1/2 right-1.5 z-10 flex flex-col items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
         <button
           ref={moveBtnRef}
-          className="p-1 rounded transition-colors hover:bg-white/10"
+          className="p-1 rounded transition-colors theme-hover"
           style={{ color: C.fg2 }}
           onClick={(e) => { e.stopPropagation(); setConfirmRemove(false); setMoveOpen(v => !v); }}
           title="Move to folder"
@@ -938,7 +938,7 @@ function SavedListItem({ event, selected, onClick, onRemove, onMove }: {
             color: confirmRemove ? "#ff7a7a" : C.fg2,
             background: confirmRemove ? "rgba(255,107,107,0.16)" : "transparent",
           }}
-          onMouseEnter={(e) => { if (!confirmRemove) e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }}
+          onMouseEnter={(e) => { if (!confirmRemove) e.currentTarget.style.background = "var(--w-a10)"; }}
           onMouseLeave={(e) => { if (!confirmRemove) e.currentTarget.style.background = "transparent"; }}
           onClick={(e) => {
             e.stopPropagation();

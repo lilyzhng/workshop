@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --sidebar-background: 0 0% 7%;
-    --sidebar-foreground: 200 10% 85%;
-    --sidebar-primary: 216 80% 70%;
-    --sidebar-primary-foreground: 0 0% 95%;
-    --sidebar-accent: 0 0% 100% / 0.06;
-    --sidebar-accent-foreground: 200 10% 85%;
-    --sidebar-border: 0 0% 100% / 0.06;
-    --sidebar-ring: 216 80% 70%;
-  }
-}
-
 @font-face {
   font-family: "AlphaLyrae";
   src: local("AlphaLyrae-Medium"), url("./assets/fonts/AlphaLyrae-Medium.ttf") format("truetype");
@@ -22,14 +9,120 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: dark light;
 }
 
 body {
-  background: #000;
-  color: #999;
+  background-color: var(--w-bg);
+  color: var(--w-fg0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Dot-grid textures (Computer + Retro) */
+[data-theme="computer"] body {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(169, 177, 214, 0.07) 1px,
+    transparent 0
+  );
+  background-size: 20px 20px;
+}
+
+[data-theme="retro"] body {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(26, 39, 68, 0.13) 1px,
+    transparent 0
+  );
+  background-size: 18px 18px;
+}
+
+[data-theme="hybrid"] body {
+  background-image: none;
+}
+
+/* Agent Computer — OBSERVE / ACT / WAIT span tags */
+.agent-action-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.agent-action-tag--observe {
+  background: var(--w-tag-observe-bg, rgba(59, 130, 246, 0.15));
+  color: var(--w-tag-observe-fg, #2563eb);
+}
+
+.agent-action-tag--act {
+  background: var(--w-tag-act-bg, rgba(34, 197, 94, 0.15));
+  color: var(--w-tag-act-fg, #15803d);
+}
+
+.agent-action-tag--wait {
+  background: var(--w-tag-wait-bg, rgba(251, 146, 60, 0.15));
+  color: var(--w-tag-wait-fg, #c2410c);
+}
+
+/* Hybrid — light shell, dark agent log trace pane */
+[data-theme="hybrid"] .run-trace-pane {
+  background: var(--w-trace-pane-bg);
+  margin: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  --w-fg0: var(--w-trace-fg0);
+  --w-fg1: var(--w-trace-fg1);
+  --w-fg2: var(--w-trace-fg2);
+  --w-fg3: var(--w-trace-fg3);
+  --w-fg4: var(--w-trace-fg4);
+  --w-border: var(--w-trace-border);
+  --w-border-light: rgba(255, 255, 255, 0.12);
+  --w-a02: rgba(255, 255, 255, 0.03);
+  --w-a04: rgba(255, 255, 255, 0.05);
+  --w-a06: rgba(255, 255, 255, 0.07);
+  --w-a08: rgba(255, 255, 255, 0.09);
+  --w-a10: rgba(255, 255, 255, 0.11);
+  --w-a15: rgba(255, 255, 255, 0.14);
+  --w-elevated: #1a1a1a;
+}
+
+[data-theme="hybrid"] .run-trace-pane .agent-action-tag--observe {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+[data-theme="hybrid"] .run-trace-pane .agent-action-tag--act {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+[data-theme="hybrid"] .run-trace-pane .agent-action-tag--wait {
+  background: rgba(251, 146, 60, 0.2);
+  color: #fdba74;
+}
+
+/* Agent light — soft white panels */
+[data-theme="agent-light"] .retro-panel,
+[data-theme="hybrid"] [data-sidebar="inset"] > div:first-child {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Agent dark — lowercase monospace headings */
+[data-theme="agent-dark"] h1,
+[data-theme="agent-dark"] h2 {
+  font-family: 'Space Mono', monospace;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
 }
 
 @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -49,11 +142,11 @@ body {
   46%, 100% { opacity: 0.18; }
 }
 @keyframes assistant-breathe {
-  0%, 100% { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.05); }
+  0%, 100% { border-color: var(--w-a10); background: var(--w-a05); }
   50% { border-color: rgba(91,141,239,0.24); background: rgba(91,141,239,0.07); }
 }
 @keyframes tool-running {
-  0%, 100% { border-color: rgba(255,255,255,0.10); }
+  0%, 100% { border-color: var(--w-a10); }
   50% { border-color: rgba(251,191,36,0.28); }
 }
 @keyframes tool-dot {
@@ -118,7 +211,7 @@ body {
 }
 .activity-inline summary:hover,
 .activity-inline[open] summary {
-  background: rgba(255,255,255,0.07);
+  background: var(--w-a07);
 }
 .activity-label {
   color: rgba(255,255,255,0.75);
@@ -132,7 +225,7 @@ body {
   transition: opacity 140ms ease, filter 140ms ease;
 }
 .activity-chevron {
-  color: rgba(255,255,255,0.28);
+  color: var(--w-a28);
   transition: color 140ms ease, transform 150ms ease;
 }
 .activity-inline summary:hover .activity-label,
@@ -149,14 +242,14 @@ body {
 }
 .activity-inline summary:hover .activity-chevron,
 .activity-inline[open] .activity-chevron {
-  color: rgba(255,255,255,0.62);
+  color: var(--w-a62);
 }
 .activity-content {
   border-left: 1px solid transparent;
   transition: border-color 140ms ease;
 }
 .activity-inline[open] .activity-content {
-  border-left-color: rgba(255,255,255,0.14);
+  border-left-color: var(--w-a14);
 }
 .activity-content pre {
   color: rgba(255,255,255,0.68);
@@ -215,33 +308,33 @@ body {
 }
 
 /* Firefox — all scrollbars: thin thumb only, no track */
-* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent; }
+* { scrollbar-width: thin; scrollbar-color: var(--w-scrollbar) transparent; }
 /* Webkit — all scrollbars: thin thumb only, no track */
 *::-webkit-scrollbar { width: 4px; height: 4px; }
 *::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
-*::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.14); }
+*::-webkit-scrollbar-thumb { background: var(--w-scrollbar); border-radius: 2px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--w-scrollbar-hover); }
 
 pre { white-space: pre-wrap; word-break: break-word; font-family: 'Space Mono', monospace; }
 
-/* Streamdown CSS variable overrides for dark theme */
+/* Streamdown markdown — theme-aware */
 .streamdown {
-  --border: rgba(255,255,255,0.12);
-  --muted: rgba(255,255,255,0.04);
-  --muted-foreground: rgba(255,255,255,0.5);
-  --foreground: rgba(255,255,255,0.85);
-  --background: #000;
-  --primary: #5B8DEF;
+  --border: var(--streamdown-border);
+  --muted: var(--streamdown-muted);
+  --muted-foreground: var(--streamdown-muted-fg);
+  --foreground: var(--streamdown-fg);
+  --background: var(--streamdown-bg);
+  --primary: var(--w-accent);
   min-width: 0;
   max-width: 100%;
-  color: rgba(200,213,220,1);
+  color: var(--streamdown-body);
   overflow-wrap: anywhere;
 }
 /* Tables stay inside the markdown container and scroll when they need width. */
 .streamdown hr { opacity: 0.35 !important; }
-.streamdown table { width: max-content !important; min-width: 100% !important; max-width: none !important; border: none !important; background: rgba(255,255,255,0.03) !important; }
-.streamdown th, .streamdown td { max-width: 280px !important; white-space: normal !important; overflow-wrap: anywhere !important; border: none !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
-.streamdown th { background: rgba(255,255,255,0.05) !important; }
+.streamdown table { width: max-content !important; min-width: 100% !important; max-width: none !important; border: none !important; background: var(--streamdown-table-bg) !important; }
+.streamdown th, .streamdown td { max-width: 280px !important; white-space: normal !important; overflow-wrap: anywhere !important; border: none !important; border-bottom: 1px solid var(--w-a06) !important; }
+.streamdown th { background: var(--streamdown-table-head) !important; }
 .streamdown [data-streamdown="table-wrapper"] { display: block !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; margin-top: 4px !important; margin-bottom: 20px !important; border: none !important; padding: 0 !important; border-radius: 4px !important; background: transparent !important; }
 .assistant-bubble-wide .streamdown [data-streamdown="table-wrapper"] { margin-bottom: 0 !important; }
 .assistant-bubble-wide .streamdown th,
@@ -250,10 +343,89 @@ pre { white-space: pre-wrap; word-break: break-word; font-family: 'Space Mono', 
 .streamdown [data-streamdown="table-wrapper"] > div:first-child {
   display: none !important;
 }
-/* Dropdown menus — dark bg, subtle border */
-.streamdown .rounded-md.border { background: #1a1a1a !important; border-color: rgba(255,255,255,0.15) !important; }
-.streamdown .rounded-md.border button { color: rgba(255,255,255,0.7) !important; }
-.streamdown .rounded-md.border button:hover { background: rgba(255,255,255,0.06) !important; }
+/* Dropdown menus */
+.streamdown .rounded-md.border { background: var(--streamdown-dropdown-bg) !important; border-color: var(--w-a15) !important; }
+.streamdown .rounded-md.border button { color: var(--w-a70) !important; }
+.streamdown .rounded-md.border button:hover { background: var(--w-a06) !important; }
+
+/* Theme-aware utility replacements for hardcoded Tailwind white/black overlays */
+.theme-hover:hover { background: var(--w-a10) !important; }
+.theme-hover-subtle:hover { background: var(--w-a05) !important; }
+.theme-chat-pane { border-color: var(--w-a10); }
+.theme-popover {
+  background: var(--w-popover-bg);
+  border: 1px solid var(--w-a12);
+  box-shadow: var(--w-popover-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.theme-input {
+  background: var(--w-a05);
+  color: var(--w-fg3);
+  border: 1px solid var(--w-border);
+}
+.theme-input:focus {
+  border-color: var(--w-a15);
+  outline: none;
+}
+.w-text-primary { color: var(--w-fg4); }
+.w-text-secondary { color: var(--w-fg2); }
+.w-text-muted { color: var(--w-fg1); }
+.w-text-faint { color: var(--w-fg0); }
+.theme-modal-scrim { background: var(--w-scrim); }
+.theme-modal-panel {
+  background: var(--w-modal-bg);
+  border: 1px solid var(--w-modal-border);
+  color: var(--w-modal-text);
+}
+.theme-modal-muted { color: var(--w-modal-text-muted); }
+.theme-code-inline {
+  background: var(--w-code-inline-bg);
+  color: var(--w-modal-text);
+}
+
+/* Embossed panels — Retro empty state + Computer hybrid accents */
+.retro-panel {
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-light);
+  border-radius: 12px;
+  box-shadow:
+    inset 1px 1px 0 var(--w-emboss-highlight, rgba(255, 255, 255, 0.08)),
+    inset -1px -1px 0 var(--w-emboss-shadow, rgba(0, 0, 0, 0.2)),
+    0 1px 3px var(--w-emboss-shadow, rgba(0, 0, 0, 0.15));
+}
+
+.retro-panel-padded {
+  padding: 28px 32px 32px;
+}
+
+/* Agent Computer CLI status semantics */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+.status-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-pill--running .status-pill-dot { background: var(--w-green); }
+.status-pill--pending .status-pill-dot { background: var(--w-status-pending, var(--w-orange)); }
+.status-pill--stopped .status-pill-dot { background: var(--w-status-stopped, var(--w-fg0)); }
+.status-pill--error .status-pill-dot { background: var(--w-red); }
+
+.status-pill--running { color: var(--w-green); }
+.status-pill--pending { color: var(--w-status-pending, var(--w-orange)); }
+.status-pill--stopped { color: var(--w-status-stopped, var(--w-fg0)); }
+.status-pill--error { color: var(--w-red); }
 
 .timeline-bar { transition: filter .12s ease; }
 .timeline-bar:hover { filter: brightness(1.2); z-index: 999 !important; }

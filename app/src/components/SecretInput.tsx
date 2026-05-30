@@ -37,7 +37,7 @@ export function SecretInput({
       <div className="flex gap-1.5">
         <input
           className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md text-[12px] font-mono outline-none transition-colors focus:ring-1 focus:ring-white/20"
-          style={{ background: "rgba(255,255,255,0.05)", color: C.fg3, border: `1px solid ${C.border}` }}
+          style={{ background: "var(--w-a05)", color: C.fg3, border: `1px solid ${C.border}` }}
           type={show ? "text" : "password"}
           placeholder={placeholder}
           value={value}
@@ -45,8 +45,8 @@ export function SecretInput({
         />
         <button
           type="button"
-          className="px-2 py-1.5 rounded-md transition-colors hover:bg-white/10 flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${C.border}`, color: C.fg1 }}
+          className="px-2 py-1.5 rounded-md transition-colors theme-hover flex-shrink-0"
+          style={{ background: "var(--w-a04)", border: `1px solid ${C.border}`, color: C.fg1 }}
           onClick={() => setShow(!show)}
         >
           {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}

@@ -1,22 +1,27 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { Plus, Trash2, Cpu, Key, FlaskConical } from "lucide-react";
+import { Plus, Trash2, Cpu, Key, FlaskConical, Palette, Check } from "lucide-react";
 import { C } from "../utils/colors";
 import { LocalAgentSetupCTA } from "../components/LocalAgentSetupCTA";
 import { SecretInput } from "../components/SecretInput";
 import { useWorkshopEvent } from "../hooks/use-workshop-ws";
+import { useTheme } from "../themes/ThemeProvider";
+import { WORKSHOP_THEMES, displayFontFamily } from "../themes/theme-config";
 
-type Tab = "agents" | "keys" | "debug";
+type Tab = "appearance" | "agents" | "keys" | "debug";
 
 const TABS: { id: Tab; label: string; icon: typeof Cpu }[] = [
+  { id: "appearance", label: "Appearance",          icon: Palette },
   { id: "keys",         label: "API Keys",            icon: Key },
   { id: "agents",       label: "Agent Endpoints",     icon: Cpu },
   { id: "debug",        label: "Debug",               icon: FlaskConical },
 ];
 
 export function SettingsPage() {
-  const [tab, setTab] = useState<Tab>("keys");
+  const [tab, setTab] = useState<Tab>("appearance");
+  const { theme } = useTheme();
 
   const sectionMap: Record<Tab, () => ReactNode> = {
+    appearance: () => <AppearanceSection />,
     agents: () => <AgentEndpointsSection />,
     keys: () => <KeysSection />,
     debug: () => <DebugSection />,
@@ -26,8 +31,8 @@ export function SettingsPage() {
     <div className="h-full flex">
       <div className="w-48 flex-shrink-0 p-6 pr-0">
         <h1
-          className="text-[22px] mb-6 pl-3"
-          style={{ fontFamily: '"AlphaLyrae", sans-serif', color: C.fg4 }}
+          className="text-[22px] mb-6 pl-3 w-display-font"
+          style={{ fontFamily: displayFontFamily(theme), color: C.fg4 }}
         >
           settings
         </h1>
@@ -39,7 +44,7 @@ export function SettingsPage() {
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-150"
               style={{
                 color: tab === id ? C.fg4 : C.fg0,
-                background: tab === id ? "rgba(255,255,255,0.06)" : "transparent",
+                background: tab === id ? "var(--w-a06)" : "transparent",
               }}
             >
               <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ opacity: tab === id ? 0.9 : 0.4 }} />
@@ -50,7 +55,7 @@ export function SettingsPage() {
       </div>
 
       <div className="flex-1 overflow-auto sb p-6 pl-8">
-        <div className="max-w-xl pb-16">
+        <div className="max-w-2xl pb-16">
           {sectionMap[tab]()}
         </div>
       </div>
@@ -69,6 +74,72 @@ function SectionBlock({ id, title, description, children }: { id: Tab; title: st
   );
 }
 
+function AppearanceSection() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <SectionBlock
+      id="appearance"
+      title="Theme"
+      description="Choose a color theme for the Workshop UI. Saved in your browser."
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {WORKSHOP_THEMES.map((item) => (
+          <ThemeCard
+            key={item.id}
+            active={theme === item.id}
+            label={item.label}
+            description={item.description}
+            swatch={item.swatch}
+            onSelect={() => setTheme(item.id)}
+          />
+        ))}
+      </div>
+    </SectionBlock>
+  );
+}
+
+function ThemeCard({
+  active,
+  label,
+  description,
+  swatch,
+  onSelect,
+}: {
+  active: boolean;
+  label: string;
+  description: string;
+  swatch: [string, string, string];
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className="text-left rounded-xl p-3 transition-all duration-150"
+      style={{
+        background: active ? "var(--w-selected)" : "var(--w-a04)",
+        border: `1px solid ${active ? C.selectedBorder : C.border}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <div className="flex -space-x-1">
+          {swatch.map((color) => (
+            <span
+              key={color}
+              className="w-4 h-4 rounded-full border"
+              style={{ background: color, borderColor: "var(--w-a15)" }}
+            />
+          ))}
+        </div>
+        <span className="text-[12px] font-medium flex-1" style={{ color: C.fg4 }}>{label}</span>
+        {active && <Check className="w-3.5 h-3.5" style={{ color: C.accent }} />}
+      </div>
+      <p className="text-[11px] leading-relaxed" style={{ color: C.fg1 }}>{description}</p>
+    </button>
+  );
+}
+
 function AgentEndpointsSection() {
   const [agents, setAgents] = useState<Record<string, { url: string; contextFromTrace?: Record<string, string> }>>({});
   const [newName, setNewName] = useState("");
@@ -80,10 +151,6 @@ function AgentEndpointsSection() {
   }, []);
   useEffect(() => { reload(); }, [reload]);
 
-  // Live updates: server broadcasts `agents_updated` after any external
-  // write — `/add-replay` finishing in another window,
-  // a manual curl-refresh, or the PUT below. Lets the Settings list match
-  // disk in real time without a 15s wait or a page reload.
   useWorkshopEvent("agents_updated", (data: { agents?: typeof agents }) => {
     if (data?.agents) setAgents(data.agents);
   });
@@ -166,7 +233,7 @@ function AgentEndpointsSection() {
                   {status === "online" ? "online" : status === "checking" ? "..." : "offline"}
                 </span>
                 <button
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-white/10"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded theme-hover"
                   onClick={() => removeAgent(name)}
                 >
                   <Trash2 className="h-3 w-3" style={{ color: C.fg0 }} />
@@ -179,24 +246,24 @@ function AgentEndpointsSection() {
 
       <div className="flex gap-1.5">
         <input
-          className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md text-[12px] font-mono outline-none transition-colors focus:ring-1 focus:ring-white/20"
-          style={{ background: "rgba(255,255,255,0.05)", color: C.fg3, border: `1px solid ${C.border}` }}
+          className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md text-[12px] font-mono outline-none transition-colors focus:ring-1"
+          style={{ background: "var(--w-a05)", color: C.fg3, border: `1px solid ${C.border}`, outlineColor: "var(--w-a20, var(--w-a15))" }}
           placeholder="agent-name"
           value={newName}
           onChange={e => setNewName(e.target.value)}
           onKeyDown={e => e.key === "Enter" && addAgent()}
         />
         <input
-          className="flex-[2] min-w-0 px-2.5 py-1.5 rounded-md text-[12px] font-mono outline-none transition-colors focus:ring-1 focus:ring-white/20"
-          style={{ background: "rgba(255,255,255,0.05)", color: C.fg3, border: `1px solid ${C.border}` }}
+          className="flex-[2] min-w-0 px-2.5 py-1.5 rounded-md text-[12px] font-mono outline-none transition-colors focus:ring-1"
+          style={{ background: "var(--w-a05)", color: C.fg3, border: `1px solid ${C.border}` }}
           placeholder="http://localhost:5860/replay"
           value={newUrl}
           onChange={e => setNewUrl(e.target.value)}
           onKeyDown={e => e.key === "Enter" && addAgent()}
         />
         <button
-          className="px-2.5 py-1.5 rounded-md text-[12px] transition-colors hover:bg-white/10 flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.05)", color: C.fg2, border: `1px solid ${C.border}` }}
+          className="px-2.5 py-1.5 rounded-md text-[12px] transition-colors theme-hover flex-shrink-0"
+          style={{ background: "var(--w-a05)", color: C.fg2, border: `1px solid ${C.border}` }}
           onClick={addAgent}
         >
           <Plus className="h-3 w-3" />
@@ -251,10 +318,10 @@ function DebugSection() {
           </span>
         </div>
         <button
-          className="text-[11px] font-mono px-2.5 py-1 rounded-md transition-colors hover:bg-white/10 flex-shrink-0"
+          className="text-[11px] font-mono px-2.5 py-1 rounded-md transition-colors theme-hover flex-shrink-0"
           style={{
             color: reset ? C.green : C.fg2,
-            background: reset ? "rgba(96,227,109,0.08)" : "rgba(255,255,255,0.05)",
+            background: reset ? "rgba(96,227,109,0.08)" : "var(--w-a05)",
             border: `1px solid ${reset ? "rgba(96,227,109,0.15)" : C.border}`,
           }}
           onClick={resetChatOnboarding}

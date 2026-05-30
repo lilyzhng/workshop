@@ -1,0 +1,786 @@
+/* Workshop theme tokens — applied via data-theme on <html> */
+
+/* ── Obsidian (default dark) ─────────────────────────────────────────── */
+:root,
+[data-theme="obsidian"] {
+  color-scheme: dark;
+
+  --w-bg: #000000;
+  --w-surface: #0a0a0a;
+  --w-elevated: #111111;
+  --w-border: rgba(255, 255, 255, 0.06);
+  --w-border-light: rgba(255, 255, 255, 0.1);
+
+  --w-fg0: #5a6a72;
+  --w-fg1: #7d8a90;
+  --w-fg2: #a0acb2;
+  --w-fg3: #c8d5dc;
+  --w-fg4: #e1e8ec;
+  --w-fg5: #f2f5f7;
+
+  --w-accent: #5b8def;
+  --w-green: #60e36d;
+  --w-red: #eb1414;
+  --w-purple: #a57cf5;
+  --w-orange: #f0ad4e;
+  --w-cyan: #4fcae3;
+  --w-user: #0d3442;
+
+  --w-selected: rgba(91, 141, 239, 0.08);
+  --w-selected-border: rgba(91, 141, 239, 0.2);
+
+  --w-scrim: rgba(0, 0, 0, 0.35);
+  --w-modal-bg: rgba(9, 9, 11, 0.92);
+  --w-modal-border: rgba(255, 255, 255, 0.1);
+  --w-modal-text: rgba(255, 255, 255, 0.9);
+  --w-modal-text-muted: rgba(255, 255, 255, 0.62);
+  --w-code-inline-bg: rgba(255, 255, 255, 0.1);
+
+  --w-a02: rgba(255, 255, 255, 0.02);
+  --w-a025: rgba(255, 255, 255, 0.025);
+  --w-a03: rgba(255, 255, 255, 0.03);
+  --w-a035: rgba(255, 255, 255, 0.035);
+  --w-a04: rgba(255, 255, 255, 0.04);
+  --w-a05: rgba(255, 255, 255, 0.05);
+  --w-a06: rgba(255, 255, 255, 0.06);
+  --w-a07: rgba(255, 255, 255, 0.07);
+  --w-a08: rgba(255, 255, 255, 0.08);
+  --w-a09: rgba(255, 255, 255, 0.09);
+  --w-a10: rgba(255, 255, 255, 0.1);
+  --w-a12: rgba(255, 255, 255, 0.12);
+  --w-a13: rgba(255, 255, 255, 0.13);
+  --w-a14: rgba(255, 255, 255, 0.14);
+  --w-a15: rgba(255, 255, 255, 0.15);
+  --w-a18: rgba(255, 255, 255, 0.18);
+  --w-a24: rgba(255, 255, 255, 0.24);
+  --w-a28: rgba(255, 255, 255, 0.28);
+  --w-a35: rgba(255, 255, 255, 0.35);
+  --w-a45: rgba(255, 255, 255, 0.45);
+  --w-a50: rgba(255, 255, 255, 0.5);
+  --w-a62: rgba(255, 255, 255, 0.62);
+  --w-a70: rgba(255, 255, 255, 0.7);
+  --w-a85: rgba(255, 255, 255, 0.85);
+  --w-a90: rgba(255, 255, 255, 0.9);
+
+  --w-scrollbar: rgba(255, 255, 255, 0.08);
+  --w-scrollbar-hover: rgba(255, 255, 255, 0.14);
+
+  --sidebar-background: 0 0% 7%;
+  --sidebar-foreground: 200 10% 85%;
+  --sidebar-primary: 216 80% 70%;
+  --sidebar-primary-foreground: 0 0% 95%;
+  --sidebar-accent: 0 0% 100% / 0.06;
+  --sidebar-accent-foreground: 200 10% 85%;
+  --sidebar-border: 0 0% 100% / 0.06;
+  --sidebar-ring: 216 80% 70%;
+
+  --streamdown-border: rgba(255, 255, 255, 0.12);
+  --streamdown-muted: rgba(255, 255, 255, 0.04);
+  --streamdown-muted-fg: rgba(255, 255, 255, 0.5);
+  --streamdown-fg: rgba(255, 255, 255, 0.85);
+  --streamdown-bg: #000000;
+  --streamdown-body: rgba(200, 213, 220, 1);
+  --streamdown-table-bg: rgba(255, 255, 255, 0.03);
+  --streamdown-table-head: rgba(255, 255, 255, 0.05);
+  --streamdown-dropdown-bg: #1a1a1a;
+
+  --w-popover-bg: rgba(20, 20, 20, 0.88);
+  --w-popover-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --w-chat-pane-bg: rgba(9, 9, 11, 0.72);
+  --w-chat-input-bg: rgba(16, 16, 16, 0.82);
+  --w-select-bg: #111111;
+  --w-select-fg: #e8e8e8;
+  --w-tooltip-bg: #252525;
+  --w-tooltip-fg: rgba(255, 255, 255, 0.92);
+
+  --w-status-pending: #f0ad4e;
+  --w-status-stopped: #5a6a72;
+  --w-pixel-fill: 142, 157, 166;
+  --w-emboss-highlight: rgba(255, 255, 255, 0.06);
+  --w-emboss-shadow: rgba(0, 0, 0, 0.25);
+}
+
+/* ── Paper (warm light) ──────────────────────────────────────────────── */
+[data-theme="paper"] {
+  color-scheme: light;
+
+  --w-bg: #faf8f5;
+  --w-surface: #ffffff;
+  --w-elevated: #f3efe8;
+  --w-border: rgba(26, 24, 22, 0.08);
+  --w-border-light: rgba(26, 24, 22, 0.12);
+
+  --w-fg0: #a09890;
+  --w-fg1: #7a726a;
+  --w-fg2: #5c554e;
+  --w-fg3: #3d3832;
+  --w-fg4: #2a2622;
+  --w-fg5: #1a1816;
+
+  --w-accent: #c4713b;
+  --w-green: #2d8a47;
+  --w-red: #c53030;
+  --w-purple: #7c5cbf;
+  --w-orange: #c4713b;
+  --w-cyan: #2b8a9e;
+  --w-user: #e8f0f8;
+
+  --w-selected: rgba(196, 113, 59, 0.1);
+  --w-selected-border: rgba(196, 113, 59, 0.25);
+
+  --w-scrim: rgba(26, 24, 22, 0.25);
+  --w-modal-bg: rgba(255, 255, 255, 0.96);
+  --w-modal-border: rgba(26, 24, 22, 0.12);
+  --w-modal-text: rgba(26, 24, 22, 0.92);
+  --w-modal-text-muted: rgba(26, 24, 22, 0.58);
+  --w-code-inline-bg: rgba(26, 24, 22, 0.06);
+
+  --w-a02: rgba(26, 24, 22, 0.02);
+  --w-a025: rgba(26, 24, 22, 0.025);
+  --w-a03: rgba(26, 24, 22, 0.03);
+  --w-a035: rgba(26, 24, 22, 0.035);
+  --w-a04: rgba(26, 24, 22, 0.04);
+  --w-a05: rgba(26, 24, 22, 0.05);
+  --w-a06: rgba(26, 24, 22, 0.06);
+  --w-a07: rgba(26, 24, 22, 0.07);
+  --w-a08: rgba(26, 24, 22, 0.08);
+  --w-a09: rgba(26, 24, 22, 0.09);
+  --w-a10: rgba(26, 24, 22, 0.1);
+  --w-a12: rgba(26, 24, 22, 0.12);
+  --w-a13: rgba(26, 24, 22, 0.13);
+  --w-a14: rgba(26, 24, 22, 0.14);
+  --w-a15: rgba(26, 24, 22, 0.15);
+  --w-a18: rgba(26, 24, 22, 0.18);
+  --w-a24: rgba(26, 24, 22, 0.24);
+  --w-a28: rgba(26, 24, 22, 0.28);
+  --w-a35: rgba(26, 24, 22, 0.35);
+  --w-a45: rgba(26, 24, 22, 0.45);
+  --w-a50: rgba(26, 24, 22, 0.5);
+  --w-a62: rgba(26, 24, 22, 0.62);
+  --w-a70: rgba(26, 24, 22, 0.7);
+  --w-a85: rgba(26, 24, 22, 0.85);
+  --w-a90: rgba(26, 24, 22, 0.9);
+
+  --w-scrollbar: rgba(26, 24, 22, 0.12);
+  --w-scrollbar-hover: rgba(26, 24, 22, 0.2);
+
+  --sidebar-background: 40 20% 96%;
+  --sidebar-foreground: 30 8% 35%;
+  --sidebar-primary: 24 55% 48%;
+  --sidebar-primary-foreground: 40 20% 98%;
+  --sidebar-accent: 30 8% 20% / 0.06;
+  --sidebar-accent-foreground: 30 8% 30%;
+  --sidebar-border: 30 8% 20% / 0.08;
+  --sidebar-ring: 24 55% 48%;
+
+  --streamdown-border: rgba(26, 24, 22, 0.12);
+  --streamdown-muted: rgba(26, 24, 22, 0.04);
+  --streamdown-muted-fg: rgba(26, 24, 22, 0.5);
+  --streamdown-fg: rgba(26, 24, 22, 0.88);
+  --streamdown-bg: #ffffff;
+  --streamdown-body: rgba(42, 38, 34, 1);
+  --streamdown-table-bg: rgba(26, 24, 22, 0.03);
+  --streamdown-table-head: rgba(26, 24, 22, 0.06);
+  --streamdown-dropdown-bg: #ffffff;
+
+  --w-popover-bg: rgba(255, 255, 255, 0.97);
+  --w-popover-shadow: 0 8px 32px rgba(26, 24, 22, 0.12);
+  --w-chat-pane-bg: rgba(255, 255, 255, 0.88);
+  --w-chat-input-bg: rgba(255, 255, 255, 0.96);
+  --w-select-bg: #ffffff;
+  --w-select-fg: #2a2622;
+  --w-tooltip-bg: #ffffff;
+  --w-tooltip-fg: #3d3832;
+}
+
+/* ── Daylight (cool light) ───────────────────────────────────────────── */
+[data-theme="daylight"] {
+  color-scheme: light;
+
+  --w-bg: #f8fafc;
+  --w-surface: #ffffff;
+  --w-elevated: #f1f5f9;
+  --w-border: rgba(15, 23, 42, 0.08);
+  --w-border-light: rgba(15, 23, 42, 0.12);
+
+  --w-fg0: #94a3b8;
+  --w-fg1: #64748b;
+  --w-fg2: #475569;
+  --w-fg3: #334155;
+  --w-fg4: #1e293b;
+  --w-fg5: #0f172a;
+
+  --w-accent: #2563eb;
+  --w-green: #16a34a;
+  --w-red: #dc2626;
+  --w-purple: #7c3aed;
+  --w-orange: #ea580c;
+  --w-cyan: #0891b2;
+  --w-user: #eff6ff;
+
+  --w-selected: rgba(37, 99, 235, 0.08);
+  --w-selected-border: rgba(37, 99, 235, 0.22);
+
+  --w-scrim: rgba(15, 23, 42, 0.22);
+  --w-modal-bg: rgba(255, 255, 255, 0.97);
+  --w-modal-border: rgba(15, 23, 42, 0.1);
+  --w-modal-text: rgba(15, 23, 42, 0.92);
+  --w-modal-text-muted: rgba(15, 23, 42, 0.55);
+  --w-code-inline-bg: rgba(15, 23, 42, 0.06);
+
+  --w-a02: rgba(15, 23, 42, 0.02);
+  --w-a025: rgba(15, 23, 42, 0.025);
+  --w-a03: rgba(15, 23, 42, 0.03);
+  --w-a035: rgba(15, 23, 42, 0.035);
+  --w-a04: rgba(15, 23, 42, 0.04);
+  --w-a05: rgba(15, 23, 42, 0.05);
+  --w-a06: rgba(15, 23, 42, 0.06);
+  --w-a07: rgba(15, 23, 42, 0.07);
+  --w-a08: rgba(15, 23, 42, 0.08);
+  --w-a09: rgba(15, 23, 42, 0.09);
+  --w-a10: rgba(15, 23, 42, 0.1);
+  --w-a12: rgba(15, 23, 42, 0.12);
+  --w-a13: rgba(15, 23, 42, 0.13);
+  --w-a14: rgba(15, 23, 42, 0.14);
+  --w-a15: rgba(15, 23, 42, 0.15);
+  --w-a18: rgba(15, 23, 42, 0.18);
+  --w-a24: rgba(15, 23, 42, 0.24);
+  --w-a28: rgba(15, 23, 42, 0.28);
+  --w-a35: rgba(15, 23, 42, 0.35);
+  --w-a45: rgba(15, 23, 42, 0.45);
+  --w-a50: rgba(15, 23, 42, 0.5);
+  --w-a62: rgba(15, 23, 42, 0.62);
+  --w-a70: rgba(15, 23, 42, 0.7);
+  --w-a85: rgba(15, 23, 42, 0.85);
+  --w-a90: rgba(15, 23, 42, 0.9);
+
+  --w-scrollbar: rgba(15, 23, 42, 0.12);
+  --w-scrollbar-hover: rgba(15, 23, 42, 0.2);
+
+  --sidebar-background: 210 40% 98%;
+  --sidebar-foreground: 215 16% 40%;
+  --sidebar-primary: 221 83% 53%;
+  --sidebar-primary-foreground: 210 40% 98%;
+  --sidebar-accent: 215 16% 20% / 0.06;
+  --sidebar-accent-foreground: 215 16% 30%;
+  --sidebar-border: 215 16% 20% / 0.08;
+  --sidebar-ring: 221 83% 53%;
+
+  --streamdown-border: rgba(15, 23, 42, 0.12);
+  --streamdown-muted: rgba(15, 23, 42, 0.04);
+  --streamdown-muted-fg: rgba(15, 23, 42, 0.5);
+  --streamdown-fg: rgba(15, 23, 42, 0.88);
+  --streamdown-bg: #ffffff;
+  --streamdown-body: rgba(30, 41, 59, 1);
+  --streamdown-table-bg: rgba(15, 23, 42, 0.03);
+  --streamdown-table-head: rgba(15, 23, 42, 0.06);
+  --streamdown-dropdown-bg: #ffffff;
+
+  --w-popover-bg: rgba(255, 255, 255, 0.97);
+  --w-popover-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+  --w-chat-pane-bg: rgba(255, 255, 255, 0.9);
+  --w-chat-input-bg: rgba(255, 255, 255, 0.98);
+  --w-select-bg: #ffffff;
+  --w-select-fg: #1e293b;
+  --w-tooltip-bg: #ffffff;
+  --w-tooltip-fg: #334155;
+}
+
+/* ── Midnight (blue dark) ────────────────────────────────────────────── */
+[data-theme="midnight"] {
+  color-scheme: dark;
+
+  --w-bg: #070b14;
+  --w-surface: #0d1424;
+  --w-elevated: #131d32;
+  --w-border: rgba(148, 163, 184, 0.1);
+  --w-border-light: rgba(148, 163, 184, 0.16);
+
+  --w-fg0: #4b5a72;
+  --w-fg1: #64748b;
+  --w-fg2: #94a3b8;
+  --w-fg3: #cbd5e1;
+  --w-fg4: #e2e8f0;
+  --w-fg5: #f1f5f9;
+
+  --w-accent: #818cf8;
+  --w-green: #4ade80;
+  --w-red: #f87171;
+  --w-purple: #c084fc;
+  --w-orange: #fb923c;
+  --w-cyan: #22d3ee;
+  --w-user: #0f1a33;
+
+  --w-selected: rgba(129, 140, 248, 0.12);
+  --w-selected-border: rgba(129, 140, 248, 0.28);
+
+  --w-scrim: rgba(0, 0, 0, 0.45);
+  --w-modal-bg: rgba(13, 20, 36, 0.94);
+  --w-modal-border: rgba(148, 163, 184, 0.14);
+  --w-modal-text: rgba(226, 232, 240, 0.95);
+  --w-modal-text-muted: rgba(148, 163, 184, 0.75);
+  --w-code-inline-bg: rgba(148, 163, 184, 0.12);
+
+  --w-a02: rgba(148, 163, 184, 0.04);
+  --w-a025: rgba(148, 163, 184, 0.05);
+  --w-a03: rgba(148, 163, 184, 0.06);
+  --w-a035: rgba(148, 163, 184, 0.07);
+  --w-a04: rgba(148, 163, 184, 0.08);
+  --w-a05: rgba(148, 163, 184, 0.1);
+  --w-a06: rgba(148, 163, 184, 0.12);
+  --w-a07: rgba(148, 163, 184, 0.14);
+  --w-a08: rgba(148, 163, 184, 0.16);
+  --w-a09: rgba(148, 163, 184, 0.18);
+  --w-a10: rgba(148, 163, 184, 0.2);
+  --w-a12: rgba(148, 163, 184, 0.24);
+  --w-a13: rgba(148, 163, 184, 0.26);
+  --w-a14: rgba(148, 163, 184, 0.28);
+  --w-a15: rgba(148, 163, 184, 0.3);
+  --w-a18: rgba(148, 163, 184, 0.34);
+  --w-a24: rgba(148, 163, 184, 0.4);
+  --w-a28: rgba(148, 163, 184, 0.44);
+  --w-a35: rgba(148, 163, 184, 0.5);
+  --w-a45: rgba(148, 163, 184, 0.58);
+  --w-a50: rgba(148, 163, 184, 0.62);
+  --w-a62: rgba(148, 163, 184, 0.72);
+  --w-a70: rgba(148, 163, 184, 0.78);
+  --w-a85: rgba(226, 232, 240, 0.88);
+  --w-a90: rgba(226, 232, 240, 0.92);
+
+  --w-scrollbar: rgba(148, 163, 184, 0.16);
+  --w-scrollbar-hover: rgba(148, 163, 184, 0.28);
+
+  --sidebar-background: 222 47% 6%;
+  --sidebar-foreground: 215 20% 78%;
+  --sidebar-primary: 239 84% 74%;
+  --sidebar-primary-foreground: 222 47% 98%;
+  --sidebar-accent: 215 20% 90% / 0.08;
+  --sidebar-accent-foreground: 215 20% 85%;
+  --sidebar-border: 215 20% 90% / 0.08;
+  --sidebar-ring: 239 84% 74%;
+
+  --streamdown-border: rgba(148, 163, 184, 0.16);
+  --streamdown-muted: rgba(148, 163, 184, 0.08);
+  --streamdown-muted-fg: rgba(148, 163, 184, 0.62);
+  --streamdown-fg: rgba(226, 232, 240, 0.9);
+  --streamdown-bg: #070b14;
+  --streamdown-body: rgba(203, 213, 225, 1);
+  --streamdown-table-bg: rgba(148, 163, 184, 0.06);
+  --streamdown-table-head: rgba(148, 163, 184, 0.1);
+  --streamdown-dropdown-bg: #131d32;
+
+  --w-popover-bg: rgba(13, 20, 36, 0.94);
+  --w-popover-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --w-chat-pane-bg: rgba(7, 11, 20, 0.78);
+  --w-chat-input-bg: rgba(13, 20, 36, 0.88);
+  --w-select-bg: #131d32;
+  --w-select-fg: #e2e8f0;
+  --w-tooltip-bg: #1e293b;
+  --w-tooltip-fg: #e2e8f0;
+}
+
+/* ── Sage (muted green dark) ─────────────────────────────────────────── */
+[data-theme="sage"] {
+  color-scheme: dark;
+
+  --w-bg: #0c100e;
+  --w-surface: #121916;
+  --w-elevated: #1a221d;
+  --w-border: rgba(134, 168, 148, 0.1);
+  --w-border-light: rgba(134, 168, 148, 0.16);
+
+  --w-fg0: #4a5e52;
+  --w-fg1: #6b8576;
+  --w-fg2: #8fa899;
+  --w-fg3: #b8cfc2;
+  --w-fg4: #d8e8de;
+  --w-fg5: #ecf4ef;
+
+  --w-accent: #34d399;
+  --w-green: #6ee7b7;
+  --w-red: #f87171;
+  --w-purple: #a78bfa;
+  --w-orange: #fbbf24;
+  --w-cyan: #2dd4bf;
+  --w-user: #0f2419;
+
+  --w-selected: rgba(52, 211, 153, 0.1);
+  --w-selected-border: rgba(52, 211, 153, 0.24);
+
+  --w-scrim: rgba(0, 0, 0, 0.4);
+  --w-modal-bg: rgba(18, 25, 22, 0.94);
+  --w-modal-border: rgba(134, 168, 148, 0.14);
+  --w-modal-text: rgba(236, 244, 239, 0.95);
+  --w-modal-text-muted: rgba(143, 168, 153, 0.78);
+  --w-code-inline-bg: rgba(134, 168, 148, 0.12);
+
+  --w-a02: rgba(134, 168, 148, 0.04);
+  --w-a025: rgba(134, 168, 148, 0.05);
+  --w-a03: rgba(134, 168, 148, 0.06);
+  --w-a035: rgba(134, 168, 148, 0.07);
+  --w-a04: rgba(134, 168, 148, 0.08);
+  --w-a05: rgba(134, 168, 148, 0.1);
+  --w-a06: rgba(134, 168, 148, 0.12);
+  --w-a07: rgba(134, 168, 148, 0.14);
+  --w-a08: rgba(134, 168, 148, 0.16);
+  --w-a09: rgba(134, 168, 148, 0.18);
+  --w-a10: rgba(134, 168, 148, 0.2);
+  --w-a12: rgba(134, 168, 148, 0.24);
+  --w-a13: rgba(134, 168, 148, 0.26);
+  --w-a14: rgba(134, 168, 148, 0.28);
+  --w-a15: rgba(134, 168, 148, 0.3);
+  --w-a18: rgba(134, 168, 148, 0.34);
+  --w-a24: rgba(134, 168, 148, 0.4);
+  --w-a28: rgba(134, 168, 148, 0.44);
+  --w-a35: rgba(134, 168, 148, 0.5);
+  --w-a45: rgba(134, 168, 148, 0.58);
+  --w-a50: rgba(134, 168, 148, 0.62);
+  --w-a62: rgba(134, 168, 148, 0.72);
+  --w-a70: rgba(134, 168, 148, 0.78);
+  --w-a85: rgba(236, 244, 239, 0.88);
+  --w-a90: rgba(236, 244, 239, 0.92);
+
+  --w-scrollbar: rgba(134, 168, 148, 0.16);
+  --w-scrollbar-hover: rgba(134, 168, 148, 0.28);
+
+  --sidebar-background: 150 12% 7%;
+  --sidebar-foreground: 150 10% 78%;
+  --sidebar-primary: 160 60% 52%;
+  --sidebar-primary-foreground: 150 12% 96%;
+  --sidebar-accent: 150 10% 90% / 0.08;
+  --sidebar-accent-foreground: 150 10% 85%;
+  --sidebar-border: 150 10% 90% / 0.08;
+  --sidebar-ring: 160 60% 52%;
+
+  --streamdown-border: rgba(134, 168, 148, 0.16);
+  --streamdown-muted: rgba(134, 168, 148, 0.08);
+  --streamdown-muted-fg: rgba(134, 168, 148, 0.62);
+  --streamdown-fg: rgba(236, 244, 239, 0.9);
+  --streamdown-bg: #0c100e;
+  --streamdown-body: rgba(184, 207, 194, 1);
+  --streamdown-table-bg: rgba(134, 168, 148, 0.06);
+  --streamdown-table-head: rgba(134, 168, 148, 0.1);
+  --streamdown-dropdown-bg: #1a221d;
+
+  --w-popover-bg: rgba(18, 25, 22, 0.94);
+  --w-popover-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --w-chat-pane-bg: rgba(12, 16, 14, 0.78);
+  --w-chat-input-bg: rgba(18, 25, 22, 0.9);
+  --w-select-bg: #1a221d;
+  --w-select-fg: #ecf4ef;
+  --w-tooltip-bg: #1a221d;
+  --w-tooltip-fg: #d8e8de;
+}
+
+/* ── Computer (Agent Computer — terminal dark) ───────────────────────── */
+[data-theme="computer"] {
+  color-scheme: dark;
+
+  --w-bg: #181818;
+  --w-surface: #1e1e1e;
+  --w-elevated: #24283b;
+  --w-border: rgba(169, 177, 214, 0.1);
+  --w-border-light: rgba(169, 177, 214, 0.16);
+
+  --w-fg0: #565f89;
+  --w-fg1: #787c99;
+  --w-fg2: #a9b1d6;
+  --w-fg3: #c0caf5;
+  --w-fg4: #d4be98;
+  --w-fg5: #eceff4;
+
+  --w-accent: #7aa2f7;
+  --w-green: #9ece6a;
+  --w-red: #f7768e;
+  --w-purple: #bb9af7;
+  --w-orange: #ffa014;
+  --w-cyan: #5b84de;
+  --w-user: #1a1f2e;
+
+  --w-selected: rgba(122, 162, 247, 0.1);
+  --w-selected-border: rgba(122, 162, 247, 0.28);
+
+  --w-scrim: rgba(0, 0, 0, 0.45);
+  --w-modal-bg: rgba(30, 30, 30, 0.96);
+  --w-modal-border: rgba(169, 177, 214, 0.14);
+  --w-modal-text: rgba(236, 239, 244, 0.95);
+  --w-modal-text-muted: rgba(169, 177, 214, 0.72);
+  --w-code-inline-bg: rgba(169, 177, 214, 0.1);
+
+  --w-a02: rgba(169, 177, 214, 0.04);
+  --w-a025: rgba(169, 177, 214, 0.05);
+  --w-a03: rgba(169, 177, 214, 0.06);
+  --w-a035: rgba(169, 177, 214, 0.07);
+  --w-a04: rgba(169, 177, 214, 0.08);
+  --w-a05: rgba(169, 177, 214, 0.1);
+  --w-a06: rgba(169, 177, 214, 0.12);
+  --w-a07: rgba(169, 177, 214, 0.14);
+  --w-a08: rgba(169, 177, 214, 0.16);
+  --w-a09: rgba(169, 177, 214, 0.18);
+  --w-a10: rgba(169, 177, 214, 0.2);
+  --w-a12: rgba(169, 177, 214, 0.24);
+  --w-a13: rgba(169, 177, 214, 0.26);
+  --w-a14: rgba(169, 177, 214, 0.28);
+  --w-a15: rgba(169, 177, 214, 0.3);
+  --w-a18: rgba(169, 177, 214, 0.34);
+  --w-a24: rgba(169, 177, 214, 0.4);
+  --w-a28: rgba(169, 177, 214, 0.44);
+  --w-a35: rgba(169, 177, 214, 0.5);
+  --w-a45: rgba(169, 177, 214, 0.58);
+  --w-a50: rgba(169, 177, 214, 0.62);
+  --w-a62: rgba(169, 177, 214, 0.72);
+  --w-a70: rgba(169, 177, 214, 0.78);
+  --w-a85: rgba(236, 239, 244, 0.88);
+  --w-a90: rgba(236, 239, 244, 0.92);
+
+  --w-scrollbar: rgba(169, 177, 214, 0.16);
+  --w-scrollbar-hover: rgba(169, 177, 214, 0.28);
+
+  --sidebar-background: 240 6% 10%;
+  --sidebar-foreground: 226 20% 72%;
+  --sidebar-primary: 217 91% 72%;
+  --sidebar-primary-foreground: 240 6% 96%;
+  --sidebar-accent: 226 20% 90% / 0.08;
+  --sidebar-accent-foreground: 226 20% 85%;
+  --sidebar-border: 226 20% 90% / 0.08;
+  --sidebar-ring: 217 91% 72%;
+
+  --streamdown-border: rgba(169, 177, 214, 0.16);
+  --streamdown-muted: rgba(169, 177, 214, 0.08);
+  --streamdown-muted-fg: rgba(169, 177, 214, 0.62);
+  --streamdown-fg: rgba(236, 239, 244, 0.9);
+  --streamdown-bg: #181818;
+  --streamdown-body: rgba(212, 190, 152, 1);
+  --streamdown-table-bg: rgba(169, 177, 214, 0.06);
+  --streamdown-table-head: rgba(169, 177, 214, 0.1);
+  --streamdown-dropdown-bg: #24283b;
+
+  --w-popover-bg: rgba(36, 40, 59, 0.96);
+  --w-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --w-chat-pane-bg: rgba(24, 24, 24, 0.88);
+  --w-chat-input-bg: rgba(30, 30, 30, 0.94);
+  --w-select-bg: #24283b;
+  --w-select-fg: #eceff4;
+  --w-tooltip-bg: #24283b;
+  --w-tooltip-fg: #d4be98;
+
+  --w-status-pending: #e0af68;
+  --w-status-stopped: #565f89;
+  --w-pixel-fill: 122, 162, 247;
+  --w-emboss-highlight: rgba(169, 177, 214, 0.08);
+  --w-emboss-shadow: rgba(0, 0, 0, 0.35);
+}
+
+/* ── Retro (periwinkle tactile light) ────────────────────────────────── */
+[data-theme="retro"] {
+  color-scheme: light;
+
+  --w-bg: #a8b4d4;
+  --w-surface: #b8c2de;
+  --w-elevated: #c8d0ea;
+  --w-border: rgba(26, 39, 68, 0.12);
+  --w-border-light: rgba(26, 39, 68, 0.18);
+
+  --w-fg0: #5a6482;
+  --w-fg1: #4a5470;
+  --w-fg2: #3a4460;
+  --w-fg3: #2a3454;
+  --w-fg4: #1a2744;
+  --w-fg5: #121a30;
+
+  --w-accent: #1a2744;
+  --w-green: #2d6a4f;
+  --w-red: #c53030;
+  --w-purple: #5b4a8a;
+  --w-orange: #c4713b;
+  --w-cyan: #2b6cb0;
+  --w-user: #dce4f4;
+
+  --w-selected: rgba(26, 39, 68, 0.1);
+  --w-selected-border: rgba(26, 39, 68, 0.22);
+
+  --w-scrim: rgba(26, 39, 68, 0.28);
+  --w-modal-bg: rgba(200, 208, 234, 0.97);
+  --w-modal-border: rgba(26, 39, 68, 0.16);
+  --w-modal-text: rgba(26, 39, 68, 0.92);
+  --w-modal-text-muted: rgba(26, 39, 68, 0.58);
+  --w-code-inline-bg: rgba(26, 39, 68, 0.08);
+
+  --w-a02: rgba(26, 39, 68, 0.03);
+  --w-a025: rgba(26, 39, 68, 0.04);
+  --w-a03: rgba(26, 39, 68, 0.05);
+  --w-a035: rgba(26, 39, 68, 0.06);
+  --w-a04: rgba(26, 39, 68, 0.07);
+  --w-a05: rgba(26, 39, 68, 0.08);
+  --w-a06: rgba(26, 39, 68, 0.1);
+  --w-a07: rgba(26, 39, 68, 0.11);
+  --w-a08: rgba(26, 39, 68, 0.12);
+  --w-a09: rgba(26, 39, 68, 0.13);
+  --w-a10: rgba(26, 39, 68, 0.14);
+  --w-a12: rgba(26, 39, 68, 0.16);
+  --w-a13: rgba(26, 39, 68, 0.17);
+  --w-a14: rgba(26, 39, 68, 0.18);
+  --w-a15: rgba(26, 39, 68, 0.2);
+  --w-a18: rgba(26, 39, 68, 0.24);
+  --w-a24: rgba(26, 39, 68, 0.3);
+  --w-a28: rgba(26, 39, 68, 0.34);
+  --w-a35: rgba(26, 39, 68, 0.4);
+  --w-a45: rgba(26, 39, 68, 0.48);
+  --w-a50: rgba(26, 39, 68, 0.52);
+  --w-a62: rgba(26, 39, 68, 0.62);
+  --w-a70: rgba(26, 39, 68, 0.7);
+  --w-a85: rgba(26, 39, 68, 0.85);
+  --w-a90: rgba(26, 39, 68, 0.9);
+
+  --w-scrollbar: rgba(26, 39, 68, 0.18);
+  --w-scrollbar-hover: rgba(26, 39, 68, 0.28);
+
+  --sidebar-background: 225 28% 78%;
+  --sidebar-foreground: 222 35% 28%;
+  --sidebar-primary: 222 44% 18%;
+  --sidebar-primary-foreground: 225 28% 96%;
+  --sidebar-accent: 222 44% 18% / 0.08;
+  --sidebar-accent-foreground: 222 35% 22%;
+  --sidebar-border: 222 44% 18% / 0.1;
+  --sidebar-ring: 222 44% 18%;
+
+  --streamdown-border: rgba(26, 39, 68, 0.14);
+  --streamdown-muted: rgba(26, 39, 68, 0.05);
+  --streamdown-muted-fg: rgba(26, 39, 68, 0.52);
+  --streamdown-fg: rgba(26, 39, 68, 0.88);
+  --streamdown-bg: #c8d0ea;
+  --streamdown-body: rgba(26, 39, 68, 1);
+  --streamdown-table-bg: rgba(26, 39, 68, 0.04);
+  --streamdown-table-head: rgba(26, 39, 68, 0.07);
+  --streamdown-dropdown-bg: #c8d0ea;
+
+  --w-popover-bg: rgba(200, 208, 234, 0.97);
+  --w-popover-shadow: 0 4px 20px rgba(26, 39, 68, 0.14);
+  --w-chat-pane-bg: rgba(184, 194, 222, 0.92);
+  --w-chat-input-bg: rgba(200, 208, 234, 0.98);
+  --w-select-bg: #c8d0ea;
+  --w-select-fg: #1a2744;
+  --w-tooltip-bg: #c8d0ea;
+  --w-tooltip-fg: #1a2744;
+
+  --w-status-pending: #b8860b;
+  --w-status-stopped: #5a6482;
+  --w-pixel-fill: 26, 39, 68;
+  --w-emboss-highlight: rgba(255, 255, 255, 0.42);
+  --w-emboss-shadow: rgba(26, 39, 68, 0.12);
+}
+
+/* ── Hybrid (VM dashboard — light shell + dark agent log) ────────────── */
+[data-theme="hybrid"] {
+  color-scheme: light;
+
+  --w-bg: #e8e8e8;
+  --w-surface: #ffffff;
+  --w-elevated: #f5f5f5;
+  --w-border: rgba(0, 0, 0, 0.07);
+  --w-border-light: rgba(0, 0, 0, 0.1);
+
+  --w-fg0: #9ca3af;
+  --w-fg1: #6b7280;
+  --w-fg2: #4b5563;
+  --w-fg3: #374151;
+  --w-fg4: #111827;
+  --w-fg5: #030712;
+
+  --w-accent: #3355ff;
+  --w-green: #16a34a;
+  --w-red: #dc2626;
+  --w-purple: #7c3aed;
+  --w-orange: #ea580c;
+  --w-cyan: #3355ff;
+  --w-user: #dbeafe;
+
+  --w-selected: rgba(51, 85, 255, 0.08);
+  --w-selected-border: rgba(51, 85, 255, 0.2);
+
+  --w-scrim: rgba(0, 0, 0, 0.28);
+  --w-modal-bg: rgba(255, 255, 255, 0.97);
+  --w-modal-border: rgba(0, 0, 0, 0.1);
+  --w-modal-text: rgba(17, 24, 39, 0.92);
+  --w-modal-text-muted: rgba(107, 114, 128, 0.85);
+  --w-code-inline-bg: rgba(0, 0, 0, 0.05);
+
+  --w-a02: rgba(0, 0, 0, 0.02);
+  --w-a025: rgba(0, 0, 0, 0.025);
+  --w-a03: rgba(0, 0, 0, 0.03);
+  --w-a035: rgba(0, 0, 0, 0.035);
+  --w-a04: rgba(0, 0, 0, 0.04);
+  --w-a05: rgba(0, 0, 0, 0.05);
+  --w-a06: rgba(0, 0, 0, 0.06);
+  --w-a07: rgba(0, 0, 0, 0.07);
+  --w-a08: rgba(0, 0, 0, 0.08);
+  --w-a09: rgba(0, 0, 0, 0.09);
+  --w-a10: rgba(0, 0, 0, 0.1);
+  --w-a12: rgba(0, 0, 0, 0.12);
+  --w-a13: rgba(0, 0, 0, 0.13);
+  --w-a14: rgba(0, 0, 0, 0.14);
+  --w-a15: rgba(0, 0, 0, 0.15);
+  --w-a18: rgba(0, 0, 0, 0.18);
+  --w-a24: rgba(0, 0, 0, 0.22);
+  --w-a28: rgba(0, 0, 0, 0.25);
+  --w-a35: rgba(0, 0, 0, 0.3);
+  --w-a45: rgba(0, 0, 0, 0.38);
+  --w-a50: rgba(0, 0, 0, 0.42);
+  --w-a62: rgba(0, 0, 0, 0.52);
+  --w-a70: rgba(0, 0, 0, 0.6);
+  --w-a85: rgba(0, 0, 0, 0.78);
+  --w-a90: rgba(0, 0, 0, 0.85);
+
+  --w-scrollbar: rgba(0, 0, 0, 0.14);
+  --w-scrollbar-hover: rgba(0, 0, 0, 0.22);
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 220 9% 35%;
+  --sidebar-primary: 230 100% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 230 100% 60% / 0.08;
+  --sidebar-accent-foreground: 220 9% 25%;
+  --sidebar-border: 0 0% 0% / 0.07;
+  --sidebar-ring: 230 100% 60%;
+
+  --streamdown-border: rgba(255, 255, 255, 0.1);
+  --streamdown-muted: rgba(255, 255, 255, 0.04);
+  --streamdown-muted-fg: rgba(255, 255, 255, 0.5);
+  --streamdown-fg: rgba(255, 255, 255, 0.88);
+  --streamdown-bg: #141414;
+  --streamdown-body: rgba(229, 229, 229, 1);
+  --streamdown-table-bg: rgba(255, 255, 255, 0.04);
+  --streamdown-table-head: rgba(255, 255, 255, 0.06);
+  --streamdown-dropdown-bg: #1a1a1a;
+
+  --w-popover-bg: rgba(255, 255, 255, 0.98);
+  --w-popover-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --w-chat-pane-bg: rgba(255, 255, 255, 0.98);
+  --w-chat-input-bg: rgba(245, 245, 245, 0.98);
+  --w-select-bg: #ffffff;
+  --w-select-fg: #111827;
+  --w-tooltip-bg: #111827;
+  --w-tooltip-fg: #ffffff;
+
+  --w-status-pending: #d97706;
+  --w-status-stopped: #9ca3af;
+  --w-pixel-fill: 51, 85, 255;
+  --w-emboss-highlight: rgba(255, 255, 255, 0.7);
+  --w-emboss-shadow: rgba(0, 0, 0, 0.08);
+
+  --w-tag-observe-bg: #dbeafe;
+  --w-tag-observe-fg: #1d4ed8;
+  --w-tag-act-bg: #dcfce7;
+  --w-tag-act-fg: #15803d;
+  --w-tag-wait-bg: #ffedd5;
+  --w-tag-wait-fg: #c2410c;
+
+  --w-trace-pane-bg: #141414;
+  --w-trace-fg0: #666666;
+  --w-trace-fg1: #888888;
+  --w-trace-fg2: #aaaaaa;
+  --w-trace-fg3: #cccccc;
+  --w-trace-fg4: #eeeeee;
+  --w-trace-border: rgba(255, 255, 255, 0.08);
+  --w-trace-surface: rgba(255, 255, 255, 0.04);
+}

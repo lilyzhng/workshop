@@ -74,14 +74,14 @@ function AppLayout() {
             <MessagePane activeRunId={activeRunId} />
           </div>
           {showDisconnectedNotice && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/35 px-6">
+            <div className="absolute inset-0 z-50 flex items-center justify-center theme-modal-scrim px-6">
               <div
-                className="flex min-h-[180px] w-[520px] max-w-full flex-col items-center justify-center rounded-[10px] border border-white/10 bg-zinc-950/90 px-9 py-6 text-center shadow-2xl shadow-black/50 backdrop-blur"
+                className="theme-modal-panel flex min-h-[180px] w-[520px] max-w-full flex-col items-center justify-center rounded-[10px] px-9 py-6 text-center shadow-2xl backdrop-blur"
                 style={{ fontFamily: '"AlphaLyrae", sans-serif' }}
               >
-                <div className="text-lg font-medium text-white/90">Workshop isn&apos;t running.</div>
-                <div className="mt-4 text-[15px] leading-relaxed text-white/62">
-                  Run <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-white/90">raindrop workshop</code> from your terminal to resume.
+                <div className="text-lg font-medium">Workshop isn&apos;t running.</div>
+                <div className="theme-modal-muted mt-4 text-[15px] leading-relaxed">
+                  Run <code className="theme-code-inline rounded px-1.5 py-0.5 font-mono">raindrop workshop</code> from your terminal to resume.
                 </div>
               </div>
             </div>

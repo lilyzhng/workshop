@@ -658,7 +658,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
 
   return (
     <aside
-      className="relative flex h-screen origin-right flex-col overflow-hidden border-l border-white/10 bg-zinc-950/40"
+      className="relative flex h-screen origin-right flex-col overflow-hidden border-l border-[color:var(--w-a10)] bg-[var(--w-chat-pane-bg)]"
       style={{
         width: paneWidth,
         minWidth: paneWidth,
@@ -677,7 +677,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
       aria-hidden={springClosing}
     >
       <div
-        className="absolute inset-y-0 left-0 z-10 w-2 -translate-x-1 cursor-ew-resize transition-colors hover:bg-white/10"
+        className="absolute inset-y-0 left-0 z-10 w-2 -translate-x-1 cursor-ew-resize transition-colors theme-hover"
         onPointerDown={(event) => {
           if (springClosing) return;
           resizeRef.current = { x: event.clientX, width, shouldCollapse: false };
@@ -687,7 +687,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
       />
       {!showProviderIntro && (
         showList ? (
-          <header className="flex items-start justify-between gap-3 border-b border-white/10 px-3 py-2">
+          <header className="flex items-start justify-between gap-3 border-b border-[color:var(--w-a10)] px-3 py-2">
             <div className="flex min-w-0 flex-col gap-1">
               <ProviderDropdown
                 provider={provider}
@@ -699,7 +699,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
             <div className="flex shrink-0 items-center gap-1">
               <button
                 onClick={() => setCollapsed(true)}
-                className="min-h-8 rounded-md px-2.5 text-xs font-medium text-white/55 transition-[transform,background-color,color] hover:bg-white/5 hover:text-white active:scale-[0.96]"
+                className="min-h-8 rounded-md px-2.5 text-xs font-medium text-[color:var(--w-fg1)] transition-[transform,background-color,color] theme-hover-subtle hover:text-[color:var(--w-fg4)] active:scale-[0.96]"
                 title="Collapse chat"
               >
                 Collapse
@@ -707,10 +707,10 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
             </div>
           </header>
         ) : (
-          <header className="relative z-10 border-b border-white/10 px-3 pb-2 pt-0.5 shadow-[0_18px_34px_rgba(0,0,0,0.92)]">
+          <header className="relative z-10 border-b border-[color:var(--w-a10)] px-3 pb-2 pt-0.5 shadow-[0_18px_34px_rgba(0,0,0,0.92)]">
             <button
               onClick={() => { setShowList(true); void refreshSessions(); }}
-              className="mb-1 -ml-1.5 inline-flex items-center gap-0.5 rounded text-xs font-medium text-white/45 transition-colors hover:text-white/80"
+              className="mb-1 -ml-1.5 inline-flex items-center gap-0.5 rounded text-xs font-medium text-[color:var(--w-fg0)] transition-colors hover:text-[color:var(--w-fg4)]/80"
               title="Show all chats"
             >
               <ChevronLeft className="h-3 w-3" />
@@ -718,10 +718,10 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
             </button>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-medium text-white/85" title={detail?.preview ?? detail?.last_prompt ?? "New chat"}>
+                <div className="truncate text-sm font-medium text-[color:var(--w-fg3)]" title={detail?.preview ?? detail?.last_prompt ?? "New chat"}>
                   {detail?.preview ?? detail?.last_prompt ?? "New chat"}
                 </div>
-                <div className="mt-1 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-white/35">
+                <div className="mt-1 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-[color:var(--w-fg4)]/35">
                   <FolderIcon className="h-3 w-3 shrink-0" />
                   <span className="min-w-0 break-all leading-snug" title={currentCwd ?? undefined}>{currentCwdDisplay}</span>
                 </div>
@@ -732,16 +732,16 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
                     <HeaderIconTooltip label="Open in terminal">
                       <button
                         onClick={() => void copyOpenInTerminalCommand()}
-                        className="grid h-7 w-7 place-items-center rounded-md border border-white/10 bg-white/[0.04] text-white/50 transition-[transform,background-color,border-color,color] hover:border-white/18 hover:bg-white/[0.08] hover:text-white active:scale-[0.96]"
+                        className="grid h-7 w-7 place-items-center rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a04)] text-[color:var(--w-fg0)] transition-[transform,background-color,border-color,color] hover:border-white/18 theme-hover hover:text-[color:var(--w-fg4)] active:scale-[0.96]"
                         aria-label="Open in terminal"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
                       </button>
                     </HeaderIconTooltip>
                     {terminalCommandCopied && (
-                    <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-lg border border-white/10 bg-zinc-900/95 px-3 py-2 text-[11px] leading-relaxed text-white/75 shadow-2xl backdrop-blur">
+                    <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-lg border border-[color:var(--w-a10)] bg-[var(--w-popover-bg)] px-3 py-2 text-[11px] leading-relaxed text-[color:var(--w-fg2)] shadow-2xl backdrop-blur">
                       <div>Copied command to clipboard. Run it in your terminal.</div>
-                      <code className="mt-2 block select-all break-all rounded bg-black/35 px-2 py-1.5 font-mono text-[10px] text-white/85">
+                      <code className="mt-2 block select-all break-all rounded bg-[var(--w-a12)] px-2 py-1.5 font-mono text-[10px] text-[color:var(--w-fg3)]">
                         {terminalCommand}
                       </code>
                       </div>
@@ -751,7 +751,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
                 <HeaderIconTooltip label="New chat">
                   <button
                     onClick={startNewChat}
-                    className="grid h-7 w-7 place-items-center rounded-md border border-white/10 bg-white/[0.04] text-white/50 transition-[transform,background-color,border-color,color] hover:border-white/18 hover:bg-white/[0.08] hover:text-white active:scale-[0.96]"
+                    className="grid h-7 w-7 place-items-center rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a04)] text-[color:var(--w-fg0)] transition-[transform,background-color,border-color,color] hover:border-white/18 theme-hover hover:text-[color:var(--w-fg4)] active:scale-[0.96]"
                     aria-label="New chat"
                   >
                     <Plus className="h-3.5 w-3.5" />
@@ -760,7 +760,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
                 <HeaderIconTooltip label="Hide">
                   <button
                     onClick={() => setCollapsed(true)}
-                    className="grid h-7 w-7 place-items-center rounded-md border border-white/10 bg-white/[0.04] text-white/50 transition-[transform,background-color,border-color,color] hover:border-white/18 hover:bg-white/[0.08] hover:text-white active:scale-[0.96]"
+                    className="grid h-7 w-7 place-items-center rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a04)] text-[color:var(--w-fg0)] transition-[transform,background-color,border-color,color] hover:border-white/18 theme-hover hover:text-[color:var(--w-fg4)] active:scale-[0.96]"
                     aria-label="Hide chat"
                   >
                     <X className="h-3.5 w-3.5" />
@@ -808,7 +808,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
           <footer className="absolute inset-x-0 bottom-0 z-20 px-2 pb-[10px] pt-3">
             {showTraceDebugPrompt && <TraceDebugPrompt onPrompt={(prompt) => void sendMessage(prompt)} />}
             {showSlash && slashItems.length > 0 && (
-              <div id="claude-slash-menu" className="absolute bottom-full left-2 right-2 mb-2 max-h-64 overflow-y-auto rounded-lg border border-white/10 bg-zinc-900/95 p-1 text-xs shadow-2xl">
+              <div id="claude-slash-menu" className="absolute bottom-full left-2 right-2 mb-2 max-h-64 overflow-y-auto rounded-lg border border-[color:var(--w-a10)] bg-[var(--w-popover-bg)] p-1 text-xs shadow-2xl">
                 {slashItems.map((item, index) => (
                   <button
                     key={`${item.value}-${item.label}`}
@@ -818,20 +818,20 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
                     onMouseEnter={() => setActiveSlashIndex(index)}
                     className={`flex w-full items-center justify-between gap-3 rounded px-2 py-1.5 text-left transition-[background-color,color] ${
                       index === activeSlashIndex
-                        ? "bg-white/10 text-white"
-                        : "text-white/70 hover:bg-white/5 hover:text-white"
+                        ? "bg-[var(--w-a10)] text-[color:var(--w-fg4)]"
+                        : "text-[color:var(--w-fg2)] theme-hover-subtle hover:text-[color:var(--w-fg4)]"
                     }`}
                   >
                     <span className="min-w-0">
                       <span className="block truncate font-medium">{item.label}</span>
-                      {item.description && <span className="block truncate text-[10px] text-white/40">{item.description}</span>}
+                      {item.description && <span className="block truncate text-[10px] text-[color:var(--w-fg4)]/40">{item.description}</span>}
                     </span>
-                    <span className="shrink-0 truncate font-mono text-[10px] text-white/35">{item.value}</span>
+                    <span className="shrink-0 truncate font-mono text-[10px] text-[color:var(--w-fg4)]/35">{item.value}</span>
                   </button>
                 ))}
               </div>
             )}
-            <div className="relative overflow-hidden rounded-[12px] border border-white/[0.2] bg-[#101010]/[80%] shadow-[0_14px_36px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm backdrop-saturate-150 transition-[border-color,background-color,box-shadow] focus-within:border-white/30 focus-within:bg-[#080808]/88 focus-within:shadow-[0_14px_36px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.07)]">
+            <div className="relative overflow-hidden rounded-[12px] border border-[color:var(--w-a15)] bg-[var(--w-chat-input-bg)] shadow-[0_14px_36px_var(--w-a18),inset_0_1px_0_var(--w-a04)] backdrop-blur-sm backdrop-saturate-150 transition-[border-color,background-color,box-shadow] focus-within:border-[color:var(--w-a20,var(--w-a18))] focus-within:shadow-[0_14px_36px_var(--w-a24),inset_0_1px_0_var(--w-a07)]">
               <textarea
                 value={draft}
                 onChange={(e) => {
@@ -868,12 +868,12 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
                 rows={2}
                 aria-expanded={showSlash}
                 aria-controls="claude-slash-menu"
-                className="block min-h-24 w-full resize-none rounded-[11px] bg-transparent px-3 py-3 pb-12 pr-14 text-sm text-white/90 placeholder:text-white/55 focus:outline-none focus-visible:outline-none"
+                className="block min-h-24 w-full resize-none rounded-[11px] bg-transparent px-3 py-3 pb-12 pr-14 text-sm text-[color:var(--w-fg4)] placeholder:text-[color:var(--w-fg1)] focus:outline-none focus-visible:outline-none"
               />
               <button
                 onClick={() => void sendMessage()}
                 disabled={!draft.trim() || sending}
-                className="absolute bottom-2 right-2 grid min-h-10 min-w-10 place-items-center rounded-[6px] bg-white/10 text-white/75 transition-[transform,background-color,color,opacity] hover:bg-white/15 hover:text-white active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
+                className="absolute bottom-2 right-2 grid min-h-10 min-w-10 place-items-center rounded-[6px] bg-[var(--w-a10)] text-[color:var(--w-fg2)] transition-[transform,background-color,color,opacity] hover:bg-white/15 hover:text-[color:var(--w-fg4)] active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-30 disabled:active:scale-100"
                 title="Send"
               >
                 <ArrowRight className="h-4 w-4" />
@@ -885,7 +885,7 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
       {showProviderIntro && (
         <button
           onClick={() => setCollapsed(true)}
-          className="absolute right-3 top-3 min-h-8 rounded-md px-2.5 text-xs font-medium text-white/45 transition-[transform,background-color,color] hover:bg-white/5 hover:text-white active:scale-[0.96]"
+          className="absolute right-3 top-3 min-h-8 rounded-md px-2.5 text-xs font-medium text-[color:var(--w-fg0)] transition-[transform,background-color,color] theme-hover-subtle hover:text-[color:var(--w-fg4)] active:scale-[0.96]"
           title="Hide chat"
         >
           Hide
@@ -898,16 +898,17 @@ export function MessagePane({ activeRunId }: MessagePaneProps) {
 function FloatingAskButton({ provider, onOpen }: { provider: AgentProviderId; onOpen: () => void }) {
   return (
     <div className="group fixed bottom-0 right-0 z-40">
-      <div className="pointer-events-none absolute -top-14 right-16 grid h-12 w-12 scale-75 place-items-center rounded-full border border-white/45 bg-white/95 opacity-0 shadow-[0_16px_40px_rgba(255,255,255,0.18),0_8px_26px_rgba(0,0,0,0.32)] transition-all duration-300 group-hover:-translate-y-2 group-hover:-rotate-6 group-hover:scale-100 group-hover:opacity-100 [&>img]:brightness-0">
+      <div className="pointer-events-none absolute -top-14 right-16 grid h-12 w-12 scale-75 place-items-center rounded-full border border-white/45 bg-white/95 opacity-0 shadow-[0_16px_40px_var(--w-a18),0_8px_26px_rgba(0,0,0,0.32)] transition-all duration-300 group-hover:-translate-y-2 group-hover:-rotate-6 group-hover:scale-100 group-hover:opacity-100 [&>img]:brightness-0">
         <ProviderMark provider="claude" open={true} />
       </div>
-      <div className="pointer-events-none absolute -top-12 right-3 grid h-11 w-11 scale-75 place-items-center rounded-full border border-white/40 bg-white/95 opacity-0 shadow-[0_16px_40px_rgba(255,255,255,0.18)] transition-all duration-300 delay-75 group-hover:-translate-y-3 group-hover:rotate-12 group-hover:scale-100 group-hover:opacity-100">
+      <div className="pointer-events-none absolute -top-12 right-3 grid h-11 w-11 scale-75 place-items-center rounded-full border border-white/40 bg-white/95 opacity-0 shadow-[0_16px_40px_var(--w-a18)] transition-all duration-300 delay-75 group-hover:-translate-y-3 group-hover:rotate-12 group-hover:scale-100 group-hover:opacity-100">
         <img src={codexLogo} alt="" className="h-8 w-8 object-contain" />
       </div>
       <button
         type="button"
+        data-ask-fab
         onClick={onOpen}
-        className="flex h-11 items-center gap-2 rounded-tl-[15px] rounded-r-none rounded-bl-none border border-r-0 border-b-0 border-white/80 bg-white/95 px-[26px] text-sm font-medium text-zinc-950 shadow-[0_26px_70px_rgba(0,0,0,0.72),0_8px_22px_rgba(255,255,255,0.18),0_0_0_1px_rgba(0,0,0,0.08)] backdrop-blur transition-[transform,background-color,border-color,color,box-shadow] hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-black hover:shadow-[0_32px_90px_rgba(0,0,0,0.82),0_10px_30px_rgba(255,255,255,0.24),0_0_0_1px_rgba(0,0,0,0.1)] active:translate-y-0"
+        className="flex h-11 items-center gap-2 rounded-tl-[15px] rounded-r-none rounded-bl-none border border-r-0 border-b-0 border-white/80 bg-white/95 px-[26px] text-sm font-medium text-zinc-950 shadow-[0_26px_70px_rgba(0,0,0,0.72),0_8px_22px_var(--w-a18),0_0_0_1px_rgba(0,0,0,0.08)] backdrop-blur transition-[transform,background-color,border-color,color,box-shadow] hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-black hover:shadow-[0_32px_90px_rgba(0,0,0,0.82),0_10px_30px_var(--w-a24),0_0_0_1px_rgba(0,0,0,0.1)] active:translate-y-0"
         title={`Ask ${providerLabel(provider)}`}
       >
         <Terminal className="h-4 w-4 text-zinc-950" />
@@ -933,7 +934,7 @@ function ProviderMark({ provider, open }: { provider: AgentProviderId; open: boo
     return <img src={claudeCodeLogo} alt="" className={`h-8 w-8 object-contain ${open ? "" : "opacity-80"}`} />;
   }
   return (
-    <span className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-[0_0_24px_rgba(255,255,255,0.12)]">
+    <span className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-[0_0_24px_var(--w-a12)]">
       <img src={codexLogo} alt="" className="h-7 w-7 object-contain" />
     </span>
   );
@@ -977,15 +978,15 @@ function ProviderDropdown({
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex min-h-8 items-center gap-2 rounded-md px-2 text-xs font-medium text-white/75 transition-colors hover:bg-white/5 hover:text-white"
+        className="flex min-h-8 items-center gap-2 rounded-md px-2 text-xs font-medium text-[color:var(--w-fg2)] transition-colors theme-hover-subtle hover:text-[color:var(--w-fg4)]"
         aria-expanded={open}
       >
         <SmallProviderIcon provider={provider} />
         <span>{providerLabel(provider)}</span>
-        <ChevronDown className={`h-3.5 w-3.5 text-white/35 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-[color:var(--w-fg4)]/35 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1 min-w-44 rounded-lg border border-white/10 bg-zinc-900/95 p-1 text-xs shadow-2xl backdrop-blur">
+        <div className="absolute left-0 top-full z-50 mt-1 min-w-44 rounded-lg border border-[color:var(--w-a10)] bg-[var(--w-popover-bg)] p-1 text-xs shadow-2xl backdrop-blur">
           {(["claude", "codex"] as AgentProviderId[]).map((option) => (
             <button
               key={option}
@@ -996,7 +997,7 @@ function ProviderDropdown({
                 onProviderChange(option);
               }}
               className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                provider === option ? "bg-white/10 text-white" : "text-white/65 hover:bg-white/5 hover:text-white"
+                provider === option ? "bg-[var(--w-a10)] text-[color:var(--w-fg4)]" : "text-[color:var(--w-fg1)] theme-hover-subtle hover:text-[color:var(--w-fg4)]"
               }`}
             >
               <SmallProviderIcon provider={option} />
@@ -1011,10 +1012,10 @@ function ProviderDropdown({
 
 function ProviderThinking({ provider }: { provider: AgentProviderId }) {
   if (provider === "claude") {
-    return <div className="text-xs text-white/40">Claude Code is thinking...</div>;
+    return <div className="text-xs text-[color:var(--w-fg4)]/40">Claude Code is thinking...</div>;
   }
   return (
-    <div className="flex items-center gap-2 text-xs text-white/45">
+    <div className="flex items-center gap-2 text-xs text-[color:var(--w-fg0)]">
       <span className="grid h-6 w-6 animate-pulse place-items-center rounded-full bg-white">
         <img src={codexLogo} alt="" className="h-5 w-5 object-contain" />
       </span>
@@ -1202,7 +1203,7 @@ function AskUserQuestionCard({
   const complete = Object.keys(answers).length === prompt.questions.length;
 
   return (
-    <div className="message-arrive w-[90%] rounded-[4px] border border-amber-300/20 bg-amber-300/[0.08] px-3 py-3 text-white/85">
+    <div className="message-arrive w-[90%] rounded-[4px] border border-amber-300/20 bg-amber-300/[0.08] px-3 py-3 text-[color:var(--w-fg3)]">
       <div className="mb-2 text-[11px] font-medium uppercase tracking-wide text-amber-100/70">Claude needs input</div>
       <div className="space-y-3">
         {prompt.questions.map((question, questionIndex) => {
@@ -1210,8 +1211,8 @@ function AskUserQuestionCard({
           return (
             <div key={`${prompt.id}-${questionIndex}`} className="space-y-2">
               <div>
-                {question.header && <div className="text-[11px] text-white/45">{question.header}</div>}
-                <div className="text-sm text-white/90">{question.question}</div>
+                {question.header && <div className="text-[11px] text-[color:var(--w-fg0)]">{question.header}</div>}
+                <div className="text-sm text-[color:var(--w-fg4)]">{question.question}</div>
               </div>
               <div className="grid gap-1.5">
                 {question.options.map((option) => {
@@ -1223,12 +1224,12 @@ function AskUserQuestionCard({
                       onClick={() => toggle(questionIndex, option.label, question.multiSelect)}
                       className={`rounded-[4px] border px-2 py-1.5 text-left transition-[background-color,border-color,color] ${
                         active
-                          ? "border-amber-200/45 bg-amber-200/15 text-white"
-                          : "border-white/10 bg-black/15 text-white/70 hover:bg-white/5 hover:text-white"
+                          ? "border-amber-200/45 bg-amber-200/15 text-[color:var(--w-fg4)]"
+                          : "border-[color:var(--w-a10)] bg-[var(--w-a06)] text-[color:var(--w-fg2)] theme-hover-subtle hover:text-[color:var(--w-fg4)]"
                       }`}
                     >
                       <div className="text-xs font-medium">{option.label}</div>
-                      {option.description && <div className="mt-0.5 text-[11px] text-white/45">{option.description}</div>}
+                      {option.description && <div className="mt-0.5 text-[11px] text-[color:var(--w-fg0)]">{option.description}</div>}
                     </button>
                   );
                 })}
@@ -1237,7 +1238,7 @@ function AskUserQuestionCard({
                 value={otherText[questionIndex] ?? ""}
                 onChange={(event) => setOtherText((current) => ({ ...current, [questionIndex]: event.target.value }))}
                 placeholder="Other"
-                className="w-full rounded-[4px] border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white/80 placeholder:text-white/30 focus:outline-none focus:border-white/20"
+                className="w-full rounded-[4px] border border-[color:var(--w-a10)] bg-[var(--w-a08)] px-2 py-1.5 text-xs text-[color:var(--w-fg4)]/80 placeholder:text-[color:var(--w-fg0)] focus:outline-none focus:border-[color:var(--w-a20,var(--w-a15))]"
               />
             </div>
           );
@@ -1247,7 +1248,7 @@ function AskUserQuestionCard({
         type="button"
         disabled={!complete}
         onClick={() => onAnswer(answers)}
-        className="mt-3 flex min-h-9 items-center justify-center gap-2 rounded-[4px] border border-white/10 bg-white/10 px-3 text-xs text-white/75 hover:bg-white/15 active:scale-[0.98] transition-[transform,background-color,color] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
+        className="mt-3 flex min-h-9 items-center justify-center gap-2 rounded-[4px] border border-[color:var(--w-a10)] bg-[var(--w-a10)] px-3 text-xs text-[color:var(--w-fg2)] hover:bg-white/15 active:scale-[0.98] transition-[transform,background-color,color] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
       >
         <Send className="h-3.5 w-3.5" />
         Send answer
@@ -1332,13 +1333,13 @@ function ChatList({
               onProviderChange={onProviderIntroChoice}
             />
           </div>
-          <div className="h-[210px] overflow-y-auto border-t border-white/10 px-4 py-3">
-            <div className="mb-2 text-[11px] text-white/35">
+          <div className="h-[210px] overflow-y-auto border-t border-[color:var(--w-a10)] px-4 py-3">
+            <div className="mb-2 text-[11px] text-[color:var(--w-fg4)]/35">
               Your Recent {providerLabel(introProvider)} Chats
             </div>
             <div className="space-y-1.5 opacity-60">
               {introSessions.length === 0 ? (
-                <div className="flex h-[150px] items-center justify-center text-xs text-white/35">No chats yet.</div>
+                <div className="flex h-[150px] items-center justify-center text-xs text-[color:var(--w-fg4)]/35">No chats yet.</div>
               ) : introSessions.slice(0, 4).map((session) => (
                 <ChatPreviewItem
                   key={session.id}
@@ -1356,14 +1357,14 @@ function ChatList({
       )}
           <button
             onClick={onNew}
-            className="mb-2 flex w-full items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-white/75 hover:bg-white/10 hover:text-white active:scale-[0.99] transition-[transform,background-color,color]"
+            className="mb-2 flex w-full items-center gap-2 rounded-md border border-[color:var(--w-a10)] bg-[var(--w-a05)] px-3 py-2 text-left text-sm text-[color:var(--w-fg2)] theme-hover hover:text-[color:var(--w-fg4)] active:scale-[0.99] transition-[transform,background-color,color]"
           >
             <Plus className="h-4 w-4" />
             New chat
           </button>
           <div className="space-y-1">
             {sessions.length === 0 ? (
-              <div className="px-3 py-8 text-center text-xs text-white/40">No {providerLabel(provider)} chats yet.</div>
+              <div className="px-3 py-8 text-center text-xs text-[color:var(--w-fg4)]/40">No {providerLabel(provider)} chats yet.</div>
             ) : sessions.map((session) => (
               <ChatListItem
                 key={session.id}
@@ -1400,11 +1401,11 @@ function AgentConnectCard({
 }) {
   return (
     <section className="w-full max-w-[340px] text-center">
-      <div className="text-[18px] font-medium text-white/90">Connect your coding agent</div>
-      <p className="mx-auto mt-2 max-w-[300px] text-sm leading-relaxed text-white/48">
+      <div className="text-[18px] font-medium text-[color:var(--w-fg4)]">Connect your coding agent</div>
+      <p className="mx-auto mt-2 max-w-[300px] text-sm leading-relaxed text-[color:var(--w-fg4)]/48">
         Ask questions about traces and resume chats from your terminal.
       </p>
-      <div className="mt-5 grid grid-cols-2 gap-1.5 rounded-xl border border-white/10 bg-black/15 p-1">
+      <div className="mt-5 grid grid-cols-2 gap-1.5 rounded-xl border border-[color:var(--w-a10)] bg-[var(--w-a06)] p-1">
         {(["claude", "codex"] as AgentProviderId[]).map((option) => {
           const active = selectedProvider === option;
           return (
@@ -1415,8 +1416,8 @@ function AgentConnectCard({
               disabled={busy}
               className={`flex min-h-12 items-center justify-center gap-2 rounded-lg border px-2.5 text-xs transition-[transform,background-color,border-color,color] active:scale-[0.98] ${
                 active
-                  ? "border-white/18 bg-white/[0.08] text-white"
-                  : "border-transparent text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+                  ? "border-white/18 bg-white/[0.08] text-[color:var(--w-fg4)]"
+                  : "border-transparent text-[color:var(--w-fg0)] hover:bg-[var(--w-a04)] hover:text-[color:var(--w-fg4)]/80"
               } disabled:cursor-not-allowed disabled:opacity-55`}
               aria-pressed={active}
             >
@@ -1430,7 +1431,7 @@ function AgentConnectCard({
         type="button"
         disabled={busy}
         onClick={() => onProviderChange(selectedProvider)}
-        className="mt-3 flex min-h-10 w-full items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.07] px-4 text-sm font-medium text-white transition-[transform,background-color,border-color,opacity] hover:border-white/[0.14] hover:bg-white/[0.11] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55"
+        className="mt-3 flex min-h-10 w-full items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.07] px-4 text-sm font-medium text-[color:var(--w-fg4)] transition-[transform,background-color,border-color,opacity] hover:border-white/[0.14] hover:bg-white/[0.11] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55"
       >
         {busy ? "Connecting..." : `Connect ${providerLabel(selectedProvider)}`}
       </button>
@@ -1470,23 +1471,23 @@ function ChatListItem({
       }}
       className={`w-full rounded-md border px-3 py-2 text-left transition-[background-color,border-color,color] ${
         selected
-          ? "border-white/20 bg-white/10 text-white"
-          : "border-transparent text-white/65 hover:border-white/10 hover:bg-white/5 hover:text-white"
+          ? "border-[color:var(--w-a20,var(--w-a15))] bg-[var(--w-a10)] text-[color:var(--w-fg4)]"
+          : "border-transparent text-[color:var(--w-fg1)] hover:border-[color:var(--w-a10)] theme-hover-subtle hover:text-[color:var(--w-fg4)]"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="truncate text-xs font-medium">{session.preview || "Untitled chat"}</div>
-        <div className="shrink-0 text-[10px] text-white/35">{formatSessionTime(session.updated_at)}</div>
+        <div className="shrink-0 text-[10px] text-[color:var(--w-fg4)]/35">{formatSessionTime(session.updated_at)}</div>
       </div>
-      <div className="mt-1.5 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-white/35">
+      <div className="mt-1.5 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-[color:var(--w-fg4)]/35">
         <Terminal className="h-3 w-3 shrink-0" />
         <span className="truncate" title={cwd ?? "Working directory unavailable"}>
           {cwdDisplay}
         </span>
       </div>
-      <div className="mt-1 flex items-center gap-1.5 font-mono text-[10px] text-white/30">
+      <div className="mt-1 flex items-center gap-1.5 font-mono text-[10px] text-[color:var(--w-fg0)]">
         <span>{session.id.slice(0, 8)} · {session.message_count} messages</span>
-        <span className="h-3 w-px bg-white/10" />
+        <span className="h-3 w-px bg-[var(--w-a10)]" />
         <button
           type="button"
           title={`Copy ${resumeCommandForSession(session, workspaceCwd, provider)}`}
@@ -1495,7 +1496,7 @@ function ChatListItem({
           className={`grid h-5 w-5 place-items-center rounded transition-colors focus:outline-none focus-visible:outline-none ${
             copied
               ? "text-emerald-300"
-              : "text-white/35 hover:text-white"
+              : "text-[color:var(--w-fg4)]/35 hover:text-[color:var(--w-fg4)]"
           }`}
         >
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -1516,10 +1517,10 @@ function ChatPreviewItem({
   return (
     <div className="px-1 py-1">
       <div className="flex items-center gap-3">
-        <div className="min-w-0 flex-1 truncate text-xs text-white/70">{session.preview || "Untitled chat"}</div>
-        <div className="shrink-0 text-[10px] text-white/35">{formatSessionTime(session.updated_at)}</div>
+        <div className="min-w-0 flex-1 truncate text-xs text-[color:var(--w-fg2)]">{session.preview || "Untitled chat"}</div>
+        <div className="shrink-0 text-[10px] text-[color:var(--w-fg4)]/35">{formatSessionTime(session.updated_at)}</div>
       </div>
-      <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-white/30">
+      <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-[10px] text-[color:var(--w-fg0)]">
         <Terminal className="h-3 w-3 shrink-0" />
         <span className="truncate">{cwd}</span>
       </div>
@@ -1566,7 +1567,7 @@ function TraceDebugPrompt({ onPrompt }: { onPrompt: (prompt: string) => void }) 
           key={prompt}
           type="button"
           onClick={() => onPrompt(prompt)}
-          className="min-h-8 shrink-0 rounded-[6px] border border-white/10 bg-black/20 px-2.5 py-1 text-left text-xs text-white/60 shadow-[0_6px_18px_rgba(0,0,0,0.14)] transition-[transform,background-color,border-color,color] hover:border-white/20 hover:bg-white/[0.06] hover:text-white/85 active:scale-[0.96]"
+          className="min-h-8 shrink-0 rounded-[6px] border border-[color:var(--w-a10)] bg-[var(--w-a08)] px-2.5 py-1 text-left text-xs text-[color:var(--w-fg1)] shadow-[0_6px_18px_rgba(0,0,0,0.14)] transition-[transform,background-color,border-color,color] hover:border-[color:var(--w-a20,var(--w-a15))] theme-hover-subtle hover:text-[color:var(--w-fg3)] active:scale-[0.96]"
         >
           {prompt}
         </button>
@@ -1589,7 +1590,7 @@ function MessageBubble({ message }: { message: ClaudeChatMessage }) {
   return (
     <div className="message-arrive flex flex-col items-end">
       <div
-        className="max-w-[90%] min-w-0 overflow-hidden rounded-[4px] border border-blue-400/20 bg-blue-500/15 px-3 py-2 text-white/90"
+        className="max-w-[90%] min-w-0 overflow-hidden rounded-[4px] border border-blue-400/20 bg-blue-500/15 px-3 py-2 text-[color:var(--w-fg4)]"
         onClick={handleDeepLinkClick}
       >
         <MessageText text={message.content} />
@@ -1608,7 +1609,7 @@ function AssistantBlocks({ blocks, isLive }: { blocks: AssistantMessageBlock[]; 
           return (
             <div
               key={index}
-              className={`stream-block assistant-bubble min-w-0 overflow-hidden rounded-[4px] border border-white/10 bg-white/5 text-white/85 ${wide ? "assistant-bubble-wide w-full max-w-none px-2 py-2" : "max-w-[90%] px-3 py-2"} ${isLive ? "assistant-bubble-live" : ""}`}
+              className={`stream-block assistant-bubble min-w-0 overflow-hidden rounded-[4px] border border-[color:var(--w-a10)] bg-[var(--w-a05)] text-[color:var(--w-fg3)] ${wide ? "assistant-bubble-wide w-full max-w-none px-2 py-2" : "max-w-[90%] px-3 py-2"} ${isLive ? "assistant-bubble-live" : ""}`}
               onClick={handleDeepLinkClick}
             >
               <MessageText text={block.text} />
@@ -1633,7 +1634,7 @@ function AssistantBlocks({ blocks, isLive }: { blocks: AssistantMessageBlock[]; 
 function ThinkingActivityCard({ text }: { text: string }) {
   return (
     <details
-      className="stream-block tool-card activity-inline max-w-[90%] text-[11px] text-white/40"
+      className="stream-block tool-card activity-inline max-w-[90%] text-[11px] text-[color:var(--w-fg4)]/40"
       title="thinking"
     >
       <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 py-0.5 outline-none">
@@ -1657,7 +1658,7 @@ function ToolActivityCard({ block }: { block: Extract<AssistantMessageBlock, { t
 
   return (
     <details
-      className="stream-block tool-card activity-inline max-w-[90%] text-[11px] text-white/40"
+      className="stream-block tool-card activity-inline max-w-[90%] text-[11px] text-[color:var(--w-fg4)]/40"
       title={block.name}
     >
       <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 py-0.5 outline-none">
@@ -1715,36 +1716,36 @@ function AgentAskCard({ block }: { block: Extract<AssistantMessageBlock, { type:
 
   if (block.state === "running") {
     return (
-      <div className="stream-block w-[90%] rounded-[8px] border border-sky-300/20 bg-sky-300/[0.07] px-3 py-3 text-white/80 shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
+      <div className="stream-block w-[90%] rounded-[8px] border border-sky-300/20 bg-sky-300/[0.07] px-3 py-3 text-[color:var(--w-fg4)]/80 shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
         <div className="text-[11px] font-medium uppercase tracking-wide text-sky-100/70">
           Asking agent
         </div>
-        {question && <div className="mt-2 text-sm text-white/90">{question}</div>}
-        <div className="mt-2 text-xs text-white/45">Continuing the captured agent context...</div>
+        {question && <div className="mt-2 text-sm text-[color:var(--w-fg4)]">{question}</div>}
+        <div className="mt-2 text-xs text-[color:var(--w-fg0)]">Continuing the captured agent context...</div>
       </div>
     );
   }
 
   if (!result) {
     return (
-      <div className="stream-block w-[90%] rounded-[8px] border border-sky-300/15 bg-sky-300/[0.05] px-3 py-3 text-white/75">
+      <div className="stream-block w-[90%] rounded-[8px] border border-sky-300/15 bg-sky-300/[0.05] px-3 py-3 text-[color:var(--w-fg2)]">
         <div className="text-[11px] font-medium uppercase tracking-wide text-sky-100/65">
           Asked agent
         </div>
-        {question && <div className="mt-2 text-sm text-white/85">{question}</div>}
-        <div className="mt-2 text-xs text-white/45">Workshop chat is talking to your agent...</div>
+        {question && <div className="mt-2 text-sm text-[color:var(--w-fg3)]">{question}</div>}
+        <div className="mt-2 text-xs text-[color:var(--w-fg0)]">Workshop chat is talking to your agent...</div>
       </div>
     );
   }
 
   if (status === "answered") {
     return (
-      <div className="stream-block w-[90%] rounded-[8px] border border-emerald-300/20 bg-emerald-300/[0.07] px-3 py-3 text-white/85 shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
+      <div className="stream-block w-[90%] rounded-[8px] border border-emerald-300/20 bg-emerald-300/[0.07] px-3 py-3 text-[color:var(--w-fg3)] shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
         <div className="text-[11px] font-medium uppercase tracking-wide text-emerald-100/70">
           Agent answered
         </div>
-        {question && <div className="mt-2 text-xs text-white/45">{question}</div>}
-        <div className="mt-2 text-sm leading-relaxed text-white/90">
+        {question && <div className="mt-2 text-xs text-[color:var(--w-fg0)]">{question}</div>}
+        <div className="mt-2 text-sm leading-relaxed text-[color:var(--w-fg4)]">
           <MessageText text={String(result.answer ?? "")} />
         </div>
       </div>
@@ -1755,38 +1756,38 @@ function AgentAskCard({ block }: { block: Extract<AssistantMessageBlock, { type:
     const envVar = typeof result.env_var === "string" ? result.env_var : "ANTHROPIC_API_KEY";
     const cwd = typeof result.cwd === "string" ? result.cwd : "your agent project";
     return (
-      <div className="stream-block w-[90%] rounded-[8px] border border-amber-300/25 bg-amber-300/[0.08] px-3 py-3 text-white/85">
+      <div className="stream-block w-[90%] rounded-[8px] border border-amber-300/25 bg-amber-300/[0.08] px-3 py-3 text-[color:var(--w-fg3)]">
         <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-amber-100/75">
           <KeyRound className="h-3.5 w-3.5" />
           Agent needs an API key
         </div>
-        <div className="mt-2 text-sm text-white/90">Add this to the active project env, then restart Workshop.</div>
-        <code className="mt-2 block rounded-[6px] border border-white/10 bg-black/25 px-2 py-1.5 font-mono text-[11px] text-amber-50/90">
+        <div className="mt-2 text-sm text-[color:var(--w-fg4)]">Add this to the active project env, then restart Workshop.</div>
+        <code className="mt-2 block rounded-[6px] border border-[color:var(--w-a10)] bg-black/25 px-2 py-1.5 font-mono text-[11px] text-amber-50/90">
           {envVar}=...
         </code>
-        <div className="mt-2 text-[11px] text-white/45">{cwd}/.env</div>
+        <div className="mt-2 text-[11px] text-[color:var(--w-fg0)]">{cwd}/.env</div>
       </div>
     );
   }
 
   if (status === "missing_context") {
     return (
-      <div className="stream-block w-[90%] rounded-[8px] border border-amber-300/20 bg-amber-300/[0.07] px-3 py-3 text-white/85">
+      <div className="stream-block w-[90%] rounded-[8px] border border-amber-300/20 bg-amber-300/[0.07] px-3 py-3 text-[color:var(--w-fg3)]">
         <div className="text-[11px] font-medium uppercase tracking-wide text-amber-100/70">
           Agent context unavailable
         </div>
-        <div className="mt-2 text-sm leading-relaxed text-white/85">{String(result.message ?? "This run does not include an LLM input payload that Workshop can continue.")}</div>
+        <div className="mt-2 text-sm leading-relaxed text-[color:var(--w-fg3)]">{String(result.message ?? "This run does not include an LLM input payload that Workshop can continue.")}</div>
       </div>
     );
   }
 
   return (
-    <div className="stream-block w-[90%] rounded-[8px] border border-red-300/20 bg-red-400/[0.08] px-3 py-3 text-white/85">
+    <div className="stream-block w-[90%] rounded-[8px] border border-red-300/20 bg-red-400/[0.08] px-3 py-3 text-[color:var(--w-fg3)]">
       <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-red-100/75">
         <AlertTriangle className="h-3.5 w-3.5" />
         Agent ask failed
       </div>
-      <div className="mt-2 whitespace-pre-wrap text-sm text-white/85">{String(result.message ?? result.error ?? "The captured agent context did not return a usable answer.")}</div>
+      <div className="mt-2 whitespace-pre-wrap text-sm text-[color:var(--w-fg3)]">{String(result.message ?? result.error ?? "The captured agent context did not return a usable answer.")}</div>
     </div>
   );
 }

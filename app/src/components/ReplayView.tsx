@@ -43,7 +43,7 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
         {/* Replay (left) header */}
         <div
           className="flex items-center justify-between px-3 py-1.5 min-w-0"
-          style={{ background: "rgba(255,255,255,0.10)", width: showOriginal ? `${leftPct}%` : "100%" }}
+          style={{ background: "var(--w-a10)", width: showOriginal ? `${leftPct}%` : "100%" }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <RotateCcw style={{ width: 12, height: 12, color: C.fg1, flexShrink: 0 }} />
@@ -59,8 +59,8 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
             </span>
             {!showOriginal && (
               <button
-                className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded transition-colors hover:bg-white/10 flex-shrink-0"
-                style={{ color: C.fg2, border: `1px solid rgba(255,255,255,0.15)` }}
+                className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded transition-colors theme-hover flex-shrink-0"
+                style={{ color: C.fg2, border: `1px solid var(--w-a15)` }}
                 onClick={() => setShowOriginal(true)}
               >
                 compare <ArrowRight className="size-3" />
@@ -70,7 +70,7 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {isRunning && onCancel && (
               <button
-                className="text-[10px] font-mono px-2 py-0.5 rounded transition-colors hover:bg-white/5"
+                className="text-[10px] font-mono px-2 py-0.5 rounded transition-colors theme-hover-subtle"
                 style={{ color: C.red }}
                 onClick={onCancel}
               >
@@ -79,7 +79,7 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
             )}
             {!isRunning && onReplay && (
               <button
-                className="p-1 rounded transition-colors hover:bg-white/10"
+                className="p-1 rounded transition-colors theme-hover"
                 title="Replay"
                 onClick={onReplay}
               >
@@ -95,13 +95,13 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
             <div className="flex-shrink-0" style={{ width: 4 }} />
             <div
               className="flex items-center justify-between px-3 py-1.5 min-w-0"
-              style={{ background: "rgba(255,255,255,0.04)", flex: 1 }}
+              style={{ background: "var(--w-a04)", flex: 1 }}
             >
               <span className="text-[12px] truncate" style={{ color: C.fg1 }}>
                 original — <span style={{ color: C.fg3 }}>{originalName ?? "run"}</span>
               </span>
               <button
-                className="p-0.5 rounded transition-colors hover:bg-white/10 flex-shrink-0"
+                className="p-0.5 rounded transition-colors theme-hover flex-shrink-0"
                 onClick={() => setShowOriginal(false)}
               >
                 <X className="size-3.5" style={{ color: C.fg1 }} />
@@ -142,7 +142,7 @@ export function ReplayView({ originalRunId, originalName, replayRunId, error, is
         {showOriginal && (
           <>
             <div
-              className="flex-shrink-0 cursor-col-resize hover:bg-white/10 active:bg-white/10 transition-colors"
+              className="flex-shrink-0 cursor-col-resize theme-hover active:bg-[var(--w-a10)] transition-colors"
               style={{ width: 4 }}
               onPointerDown={onPointerDown}
             />

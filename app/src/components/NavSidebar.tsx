@@ -13,6 +13,8 @@ import {
 import { Activity, Bookmark, Search, Settings } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { RaindropLogo } from "./RaindropLogo";
+import { useTheme } from "../themes/ThemeProvider";
+import { displayFontFamily } from "../themes/theme-config";
 
 export type Page = "runs" | "search" | "saved" | "settings";
 
@@ -30,6 +32,7 @@ function isNavPathActive(pathname: string, path: string): boolean {
 
 function NavSidebarInner() {
   const { state } = useSidebar();
+  const { theme } = useTheme();
   const expanded = state === "expanded";
   const location = useLocation();
   const navigate = useNavigate();
@@ -50,7 +53,7 @@ function NavSidebarInner() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <RaindropLogo size={10} className="text-white opacity-30 shrink-0 transition-all duration-200 group-hover/logo:opacity-100 group-hover/logo:drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]" />
+                <RaindropLogo size={10} className="text-sidebar-foreground opacity-30 shrink-0 transition-all duration-200 group-hover/logo:opacity-100 group-hover/logo:drop-shadow-[0_0_6px_var(--w-a35)]" />
                 <img
                   src={WORKSHOP_LOGO_URL}
                   alt=""
@@ -61,10 +64,10 @@ function NavSidebarInner() {
                 />
                 {expanded && (
                   <span
-                    className="text-[13px] -ml-px transition-all duration-200 group-hover/logo:!text-white/80"
+                    className="text-[13px] -ml-px transition-all duration-200 group-hover/logo:text-sidebar-foreground/80 w-display-font"
                     style={{
-                      fontFamily: '"AlphaLyrae", sans-serif',
-                      color: "rgba(255,255,255,0.4)",
+                      fontFamily: displayFontFamily(theme),
+                      color: "var(--w-fg0)",
                     }}
                   >
                     raindrop

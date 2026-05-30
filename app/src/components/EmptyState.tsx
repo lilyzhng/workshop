@@ -8,6 +8,8 @@ import windsurfIcon from "../assets/agent-icons/windsurf.svg";
 import codexLogo from "../assets/codex-logo.svg";
 import { C } from "../utils/colors";
 import { DropPixelGrid } from "./DropPixelGrid";
+import { useTheme } from "../themes/ThemeProvider";
+import { pixelFillForTheme, themeUsesEmbossedPanels, displayFontFamily } from "../themes/theme-config";
 
 /**
  * Shown on the runs page when the daemon hasn't received any spans yet.
@@ -51,6 +53,9 @@ interface EmptyStateProps {
 
 export function EmptyState({ onSeeDemoTraces }: EmptyStateProps) {
   const [demoLoading, setDemoLoading] = useState(false);
+  const { theme } = useTheme();
+  const embossed = themeUsesEmbossedPanels(theme);
+  const pixelFill = pixelFillForTheme(theme);
 
   async function handleSeeDemoTraces() {
     if (!onSeeDemoTraces || demoLoading) return;
@@ -67,41 +72,48 @@ export function EmptyState({ onSeeDemoTraces }: EmptyStateProps) {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.018), transparent 42%)",
+          background: embossed
+            ? "linear-gradient(180deg, var(--w-a04), transparent 50%)"
+            : "linear-gradient(180deg, var(--w-a02), transparent 42%)",
         }}
       />
-      <div className="relative mx-auto flex min-h-full max-w-2xl flex-col items-center justify-center text-center">
+      <div
+        className={`relative mx-auto flex min-h-full max-w-2xl flex-col items-center justify-center text-center ${
+          embossed ? "retro-panel retro-panel-padded" : ""
+        }`}
+      >
         <div className="mb-3">
-          <DropPixelGrid fillRgb="142,157,166" />
+          <DropPixelGrid fillRgb={pixelFill} />
         </div>
 
         <h1
-          className="text-center"
+          className="text-center w-display-font"
           style={{
-            fontFamily: '"AlphaLyrae", sans-serif',
-            fontSize: "38px",
-            fontWeight: 500,
+            fontFamily: displayFontFamily(theme),
+            fontSize: theme === "retro" || theme === "agent-dark" ? "32px" : "38px",
+            fontWeight: theme === "agent-light" ? 600 : 500,
             lineHeight: 1.12,
-            letterSpacing: "-0.02em",
-            color: C.fg2,
+            letterSpacing: theme === "agent-light" ? "-0.02em" : theme === "retro" || theme === "agent-dark" ? "-0.01em" : "-0.02em",
+            color: C.fg4,
           }}
         >
           Waiting for your agent...
         </h1>
 
-        <p className="mb-6 mt-1 max-w-2xl text-center text-[15px] font-light leading-7" style={{ color: C.fg3 }}>
+        <p className="mb-6 mt-1 max-w-2xl text-center text-[15px] font-light leading-7" style={{ color: C.fg2 }}>
           Now just instrument your agent using our skill. Next run, you'll see traces here.
         </p>
-        <CommandPill value={SETUP_ANOTHER_SLASH} large />
+        <CommandPill value={SETUP_ANOTHER_SLASH} large embossed={embossed} />
         {onSeeDemoTraces && (
           <button
             type="button"
             onClick={handleSeeDemoTraces}
             disabled={demoLoading}
-            className="mt-3 text-[14px] underline underline-offset-4 decoration-white/20 transition-all duration-150 hover:-translate-y-0.5 hover:decoration-white/70 hover:text-white/85 disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0"
+            className="mt-3 text-[14px] underline underline-offset-4 transition-all duration-150 hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0"
             style={{
               color: C.fg2,
               background: "transparent",
+              textDecorationColor: "var(--w-a20, var(--w-a15))",
             }}
           >
             {demoLoading ? "Loading demo traces..." : "See demo traces"}
@@ -120,7 +132,15 @@ export function EmptyState({ onSeeDemoTraces }: EmptyStateProps) {
 
 type Agent = (typeof AGENTS)[number];
 
-function CommandPill({ value, large = false }: { value: string; large?: boolean }) {
+function CommandPill({
+  value,
+  large = false,
+  embossed = false,
+}: {
+  value: string;
+  large?: boolean;
+  embossed?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
   function copy() {
     navigator.clipboard?.writeText(value).then(() => {
@@ -132,12 +152,16 @@ function CommandPill({ value, large = false }: { value: string; large?: boolean 
   return (
     <button
       onClick={copy}
-      className={`group mt-4 inline-flex items-center gap-0 overflow-hidden rounded-full font-mono transition-all duration-200 hover:scale-[1.02] hover:gap-1.5 hover:bg-white/15 ${large ? "px-5 py-2 text-lg" : "px-3 py-1 text-[13px]"}`}
+      className={`group mt-4 inline-flex items-center gap-0 overflow-hidden rounded-full font-mono transition-all duration-200 hover:scale-[1.02] hover:gap-1.5 theme-hover ${large ? "px-5 py-2 text-lg" : "px-3 py-1 text-[13px]"}`}
       style={{
-        color: copied ? C.green : C.fg5,
-        background: "rgba(255,255,255,0.075)",
-        border: "1px solid rgba(255,255,255,0.13)",
-        boxShadow: large ? "0 12px 40px rgba(0,0,0,0.28)" : "none",
+        color: copied ? C.green : C.fg4,
+        background: embossed ? "var(--w-elevated)" : "var(--w-a08)",
+        border: `1px solid ${C.borderLight}`,
+        boxShadow: embossed
+          ? "inset 1px 1px 0 var(--w-emboss-highlight), inset -1px -1px 0 var(--w-emboss-shadow), 0 2px 8px var(--w-emboss-shadow)"
+          : large
+            ? "0 8px 24px var(--w-a18)"
+            : "none",
       }}
       title={copied ? "Copied" : "Click to copy"}
     >
@@ -183,8 +207,8 @@ function AgentName({ agent }: { agent: Agent }) {
     return (
       <a
         href={agent.localHref}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-white/10"
-        style={{ color: C.fg1, background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.06)" }}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full transition theme-hover"
+        style={{ color: C.fg1, background: "var(--w-a035)", border: `1px solid ${C.border}` }}
         title={`Open ${agent.name}`}
       >
         {content}
@@ -195,7 +219,7 @@ function AgentName({ agent }: { agent: Agent }) {
   return (
     <span
       className="inline-flex h-8 w-8 items-center justify-center rounded-full"
-      style={{ color: C.fg1, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ color: C.fg1, background: "var(--w-a025)", border: `1px solid ${C.border}` }}
       title={agent.name}
     >
       {content}
@@ -207,7 +231,7 @@ function AgentGlyph({ agent }: { agent: Agent }) {
   return (
     <span
       className="flex h-5 w-5 items-center justify-center rounded-full"
-      style={{ background: "invertIcon" in agent && agent.invertIcon ? "rgba(255,255,255,0.86)" : "transparent" }}
+      style={{ background: "invertIcon" in agent && agent.invertIcon ? "var(--w-a70)" : "transparent" }}
     >
       <img src={agent.icon} alt="" className="h-3.5 w-3.5 object-contain opacity-75" />
     </span>
